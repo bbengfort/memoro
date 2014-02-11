@@ -87,6 +87,7 @@ WSGI_APPLICATION = 'memorandi.wsgi.application'
 
 ## Application Definition
 INSTALLED_APPS   = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,6 +95,7 @@ INSTALLED_APPS   = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'location',
 )
 
 ## Request Handling
@@ -136,6 +138,23 @@ TEMPLATE_DIRS       = (
 
 ## Uploaded Media
 MEDIA_URL           = "/media/"
+
+## Suit Admin Config
+SUIT_CONFIG         = {
+    "ADMIN_NAME": "Memorandi Admin",
+}
+
+## Template Context Processors
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+)
 
 ##########################################################################
 ## Logging and Error Reporting

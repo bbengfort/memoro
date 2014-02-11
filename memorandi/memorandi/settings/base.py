@@ -56,6 +56,21 @@ PROJECT_DIR = os.path.normpath(os.path.join(BASE_DIR, os.pardir))
 SECRET_KEY = environ_setting("SECRET_KEY")
 
 ##########################################################################
+## Database Settings
+##########################################################################
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': environ_setting('DB_NAME', 'memorandi'),
+        'USER': environ_setting('DB_USER', 'django'),
+        'PASSWORD': environ_setting('DB_PASS'),
+        'HOST': environ_setting('DB_HOST', 'localhost'),
+        'PORT': environ_setting('DB_PORT', '5432'),
+    },
+}
+
+##########################################################################
 ## Runtime settings
 ##########################################################################
 

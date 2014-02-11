@@ -1,4 +1,4 @@
-# Memorandi #
+# Memorandi [![Build Status][travis_status.png]][travis_build] #
 **A simple thought recording tool for personal use.**
 
 [![The Inner Chapters][butterfly_dream.jpg]][butterfly_dream.jpg]
@@ -16,4 +16,6 @@ available to my daughter. I'm a data scientist, I'll create the data for
 her! (Also, this project is hugely procrastinating...)
 
 <!-- References -->
+[travis_status.png]: https://travis-ci.org/bbengfort/memorandi.png?branch=master
+[travis_build]: https://travis-ci.org/bbengfort/memorandi
 [butterfly_dream.jpg]: http://www.rescen.net/Chris_Bannerman/images/Illus_01_full.jpg

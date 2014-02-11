@@ -34,7 +34,7 @@ def environ_setting(name, default=None):
     Fetch setting from the environment- if not found, then this setting is
     ImproperlyConfigured.
     """
-    if name not in os.environ and not default:
+    if name not in os.environ and default is None:
         from django.core.exceptions import ImproperlyConfigured
         raise ImproperlyConfigured(
             "The {0} ENVVAR is not set.".format(name)

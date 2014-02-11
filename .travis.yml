@@ -1,10 +1,17 @@
 language: python
 python:
     - '2.7'
+before_install:
+    - git clone git://github.com/maxmind/libmaxminddb
+    - cd libmaxminddb
+    - ./bootstrap
+    - ./configure
+    - make
+    - sudo make install
 install: pip install -r requirements.txt --use-mirrors
-script: make test
 before_script:
     - psql -c 'create database memorandi;' -U postgres
+script: make test
 env:
     global:
         - DJANGO_SETTINGS_MODULE=memorandi.settings.development

@@ -11,10 +11,10 @@ env:
         - SECRET_KEY=supersecretkey
         - DB_NAME=memorandi
         - DB_USER=postgres
-        - DB_PASS=
+        - DB_PASS=''
         - DB_HOST=localhost
         - DB_PORT=5432
-        - EMAIL_HOST_PASSWORD=
+        - EMAIL_HOST_PASSWORD=''
 notifications:
     email:
         recipients:

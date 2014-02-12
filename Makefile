@@ -22,6 +22,9 @@ TEST_SETTINGS := test
 DJANGO_TEST_SETTINGS_MODULE = $(PROJECT).settings.$(TEST_SETTINGS)
 DJANGO_TEST_POSTFIX := --settings=$(DJANGO_TEST_SETTINGS_MODULE) --pythonpath=$(PYTHONPATH)
 
+# Apps to test
+APPS := weather narrate location api
+
 # Export targets not associated with files
 .PHONY: test showenv coverage bootstrap pip virtualenv clean virtual_env_set
 
@@ -56,4 +59,4 @@ clean:
 
 # Targets for Django testing
 test:
-	-$(PYTHON_BIN)/coverage run $(PYTHON_BIN)/django-admin.py test narrate $(DJANGO_LOCAL_POSTFIX)
+	$(PYTHON_BIN)/coverage run --source=$(LOCALPATH) $(PYTHON_BIN)/django-admin.py test $(APPS) $(DJANGO_LOCAL_POSTFIX)

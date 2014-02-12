@@ -21,11 +21,34 @@ from .models import *
 from rest_framework import serializers
 
 ##########################################################################
+## Markdown Field
+##########################################################################
+
+class MarkdownField(serializers.WritableField):
+
+    def to_native(self, obj):
+        """
+        This is a good enough hack for now, but will need to do something
+        better about it in the future. The error when not utilizing this
+        method of serialization is:
+
+            'unicode' object has no attribute 'raw'
+
+        Relating to the attempt to call the field `raw` propertery but it
+        has already been passed as a unicode string.
+        """
+        return unicode(obj)
+
+##########################################################################
 ## Serializers
 ##########################################################################
 
 class MemorandumSerializer(serializers.HyperlinkedModelSerializer):
 
+    body   = MarkdownField()
+    author = serializers.PrimaryKeyRelatedField()
+
     class Meta:
         model  = Memorandum
-        fields = ('id', 'url', 'title', 'body')
+        lookup_field = "slug"
+        fields = ('id', 'url', 'title', 'body', 'author')

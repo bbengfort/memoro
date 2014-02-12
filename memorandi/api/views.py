@@ -34,15 +34,27 @@ from rest_framework.response import Response
 
 class LocationViewSet(viewsets.ModelViewSet):
 
-    queryset = Location.objects.all()
+    queryset  = Location.objects.all()
     serializer_class = LocationSerializer
 
 class WeatherViewSet(viewsets.ModelViewSet):
 
-    queryset = Weather.objects.all()
+    queryset  = Weather.objects.all()
     serializer_class = WeatherSerializer
 
 class JournalViewSet(viewsets.ModelViewSet):
 
-    queryset = Memorandum.objects.all()
+    lookup_field = "slug"
+    queryset     = Memorandum.objects.all()
     serializer_class = MemorandumSerializer
+
+    def create(self, request):
+        """
+        Overrides normal viewset to ensure the currently posting User is
+        the author of the post, if one hasn't been specified. If one has
+        been, then the username of the user is used as a lookup.
+        """
+
+        if not request.DATA.get('author', None):
+            request.DATA['author'] = request.user.pk
+        return super(JournalViewSet, self).create(request)

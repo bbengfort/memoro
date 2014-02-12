@@ -18,6 +18,7 @@ Testing the weather app
 ##########################################################################
 
 from .wunder import *
+from urlparse import urljoin
 from django.test import TestCase
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -51,7 +52,6 @@ class WunderTests(TestCase):
                 self.fail("ImproperlyConfigured raised in error.")
             self.assertNotEqual(wunder.apikey, settings.WEATHER_UNDERGROUND.get('API_KEY'))
 
-
     def test_environment(self):
         """
         Ensure that a test wunder api key is available
@@ -59,3 +59,59 @@ class WunderTests(TestCase):
         self.assertTrue(hasattr(settings, 'WEATHER_UNDERGROUND'))
         self.assertIn('API_KEY', settings.WEATHER_UNDERGROUND)
         self.assertTrue(settings.WEATHER_UNDERGROUND['API_KEY'])
+
+    def test_urlbase(self):
+        """
+        Assert that the urlbase is correctly joined
+        """
+        assumed = "http://api.wunderground.com/api/123456/"
+        with self.settings(WEATHER_UNDERGROUND={'API_KEY': '123456'}):
+            wunder = Wunder()
+            self.assertEqual(assumed, wunder.urlbase)
+
+    def test_single_feature_endpoint(self):
+        """
+        Test endpoint construction of single feature
+        """
+        assumed = "http://api.wunderground.com/api/123456/astronomy/q/"
+        with self.settings(WEATHER_UNDERGROUND={'API_KEY': '123456'}):
+            wunder   = Wunder()
+            endpoint = wunder.get_features_endpoint('astronomy')
+            self.assertEqual(assumed, endpoint)
+
+    def test_multiple_feature_endpoint(self):
+        """
+        Test endpoint construction of multiple features
+        """
+        assumed = "http://api.wunderground.com/api/123456/astronomy/conditions/q/"
+        with self.settings(WEATHER_UNDERGROUND={'API_KEY': '123456'}):
+            wunder   = Wunder()
+            endpoint = wunder.get_features_endpoint('astronomy', 'conditions')
+            self.assertEqual(assumed, endpoint)
+
+    def test_invalid_feature(self):
+        """
+        Check invalid feature won't report
+        """
+        with self.assertRaises(NotImplementedError):
+            wunder = Wunder()
+            wunder.get_features_endpoint('unknownasd12342')
+
+    def test_query_endpoint(self):
+        """
+        Test endpoint construction of a query
+        """
+        assumed = "http://api.wunderground.com/api/123456/astronomy/q/CA/San_Francisco.json"
+        with self.settings(WEATHER_UNDERGROUND={'API_KEY': '123456'}):
+            wunder   = Wunder()
+            endpoint = wunder.get_query_endpoint('CA/San_Francisco', 'astronomy')
+            self.assertEqual(assumed, endpoint)
+
+    def test_fetch_weather(self):
+        """
+        Actually attempt to fetch weather from the API!
+        """
+        wunder   = Wunder()
+        response = wunder.fetch_weather("DC/Washington")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())

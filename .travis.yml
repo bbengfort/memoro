@@ -10,7 +10,6 @@ before_install:
 - sudo make install
 - cd ..
 - rm -rf libmaxminddb
-- sudo apt-get install --qq libyaml-dev
 install: pip install -r requirements.txt
 before_script:
 - psql -c 'create database memorandi;' -U postgres

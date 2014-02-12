@@ -15,4 +15,5 @@ psycopg2==2.5.2
 python-dateutil==2.2
 requests==2.2.1
 six==1.5.2
+w3lib==1.5
 wsgiref==0.1.2

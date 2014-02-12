@@ -24,6 +24,7 @@ env:
         - DB_HOST=localhost
         - DB_PORT=5432
         - EMAIL_HOST_PASSWORD=''
+        - WUNDER_API_KEY=''
 notifications:
     email:
         recipients:

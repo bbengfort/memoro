@@ -205,7 +205,15 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
     ],
-    'PAGINATE_BY': 50,
+    'PAGINATE_BY': 10,
+}
+
+##########################################################################
+## External Services
+##########################################################################
+
+WEATHER_UNDERGROUND = {
+    "API_KEY": environ_setting("WUNDER_API_KEY", ""), # Default is empty key
 }

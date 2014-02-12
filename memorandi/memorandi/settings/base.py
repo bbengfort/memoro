@@ -143,6 +143,11 @@ MEDIA_URL           = "/media/"
 ## Suit Admin Config
 SUIT_CONFIG         = {
     "ADMIN_NAME": "Memorandi Admin",
+    "MENU_ICONS": {
+        "auth": "icon-user",
+        "location": "icon-map-marker",
+        "weather": "icon-leaf",
+    }
 }
 
 ## Template Context Processors

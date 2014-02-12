@@ -99,6 +99,7 @@ INSTALLED_APPS   = (
     'location',
     'weather',
     'narrate',
+    'api',
 )
 
 ## Request Handling

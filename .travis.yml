@@ -1,33 +1,37 @@
 language: python
 python:
-    - '2.7'
+- '2.7'
 before_install:
-    - git clone git://github.com/maxmind/libmaxminddb
-    - cd libmaxminddb
-    - ./bootstrap
-    - ./configure
-    - make
-    - sudo make install
-    - cd ..
-    - rm -rf libmaxminddb
+- git clone git://github.com/maxmind/libmaxminddb
+- cd libmaxminddb
+- ./bootstrap
+- ./configure
+- make
+- sudo make install
+- cd ..
+- rm -rf libmaxminddb
+- sudo apt-get install --qq libyaml-dev
 install: pip install -r requirements.txt
 before_script:
-    - psql -c 'create database memorandi;' -U postgres
+- psql -c 'create database memorandi;' -U postgres
 script: make test
 env:
-    global:
-        - DJANGO_SETTINGS_MODULE=memorandi.settings.development
-        - SECRET_KEY=supersecretkey
-        - DB_NAME=memorandi
-        - DB_USER=postgres
-        - DB_PASS=''
-        - DB_HOST=localhost
-        - DB_PORT=5432
-        - EMAIL_HOST_PASSWORD=''
-        - WUNDER_API_KEY=''
+  global:
+  - DJANGO_SETTINGS_MODULE=memorandi.settings.development
+  - SECRET_KEY=supersecretkey
+  - DB_NAME=memorandi
+  - DB_USER=postgres
+  - DB_PASS=''
+  - DB_HOST=localhost
+  - DB_PORT=5432
+  - EMAIL_HOST_PASSWORD=''
+  - secure: ANv8YGSVjOVtj+Lfufa5ZUXEvdUQdQIeRWkL3JnadKVozsb5D+kn3ujuiE5jItdIfdivJ3s7twtS2UuobR0BMAXsUIqqgG6WS1wZWn6hrPPizNmNjn464CvEYMaxjfGv1zlyDBpEgzfbIyCoj2Pity48C6aCRUkE7DCYuDY7Fnc=
+branches:
+  only:
+  - master
 notifications:
-    email:
-        recipients:
-            - benjamin@bengfort.com
-        on_success: change
-        on_failure: always
+  email:
+    recipients:
+    - benjamin@bengfort.com
+    on_success: change
+    on_failure: always

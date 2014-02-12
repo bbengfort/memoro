@@ -39,6 +39,19 @@ class WunderTests(TestCase):
             with self.settings(WEATHER_UNDERGROUND={}):
                 wunder = Wunder()
 
+    def test_init_override(self):
+        """
+        Ensure Wunder instances can accept apikey
+        """
+        options = {'API_KEY': 'almostarealkey'}
+        with self.settings(WEATHER_UNDERGROUND=options):
+            try:
+                wunder = Wunder(apikey='notarealkey')
+            except ImproperlyConfigured:
+                self.fail("ImproperlyConfigured raised in error.")
+            self.assertNotEqual(wunder.apikey, settings.WEATHER_UNDERGROUND.get('API_KEY'))
+
+
     def test_environment(self):
         """
         Ensure that a test wunder api key is available

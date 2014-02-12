@@ -95,8 +95,10 @@ INSTALLED_APPS   = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'taggit',
     'location',
     'weather',
+    'narrate',
 )
 
 ## Request Handling
@@ -147,6 +149,8 @@ SUIT_CONFIG         = {
         "auth": "icon-user",
         "location": "icon-map-marker",
         "weather": "icon-leaf",
+        "taggit": "icon-tags",
+        "narrate": "icon-book",
     }
 }
 

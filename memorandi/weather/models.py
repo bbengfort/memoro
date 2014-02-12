@@ -19,7 +19,6 @@ Models for the Weather meta information
 
 from utils import nullable
 from django.db import models
-from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 ##########################################################################
@@ -54,3 +53,6 @@ class Weather(TimeStampedModel):
         verbose_name    = "weather"
         unique_together = ("station_id", "observation")
         verbose_name_plural = "weather"
+
+    def __unicode__(self):
+        return "%s on %s" % (self.weather, self.observation)

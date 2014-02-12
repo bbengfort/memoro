@@ -58,6 +58,11 @@ class Location(TimeStampedModel):
         )
         verbose_name_plural = "locations"
 
+    def __unicode__(self):
+        if self.name:
+            return "%s in %s, %s" % (self.name, self.city, self.region.iso_code)
+        return "%s, %s" % (self.city, self.region)
+
 class GeoEntity(TimeStampedModel):
     """
     A database of geographic entities, e.g. regions or countries that have

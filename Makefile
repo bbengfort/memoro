@@ -56,4 +56,4 @@ clean:
 
 # Targets for Django testing
 test:
-	-$(PYTHON_BIN)/coverage run $(PYTHON_BIN)/django-admin.py test $(DJANGO_LOCAL_POSTFIX)
+	-$(PYTHON_BIN)/coverage run $(PYTHON_BIN)/django-admin.py test narrate $(DJANGO_LOCAL_POSTFIX)

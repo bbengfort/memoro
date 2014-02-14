@@ -17,6 +17,8 @@ Models for the location metadata
 ## Imports
 ##########################################################################
 
+import os
+
 from utils import nullable
 from django.db import models
 from model_utils import Choices
@@ -48,6 +50,7 @@ class Location(TimeStampedModel):
     longitude    = models.FloatField( **nullable )                # Decimal longitude
     postal_code  = models.CharField( max_length=31 )              # Postal code
     ipaddr       = models.IPAddressField( **nullable )            # IP Address of request
+    station      = models.CharField( max_length=50, **nullable )  # Prefered Weather Station
 
     class Meta:
         db_table        = "location"
@@ -56,12 +59,36 @@ class Location(TimeStampedModel):
             ("latitude", "longitude"),
             ("name", "address", "city", "country", "region", "postal_code"),
         )
+        ordering        = ["-modified",]
+        get_latest_by   = "modified"
         verbose_name_plural = "locations"
 
     def __unicode__(self):
         if self.name:
             return "%s in %s, %s" % (self.name, self.city, self.region.iso_code)
         return "%s, %s" % (self.city, self.region)
+
+    def to_query(self):
+        """
+        Returns a string to send to the Weather Underground API.
+        """
+        if self.latitude and self.longitude:
+            return ",".join(str(self.latitude), str(self.longitude))
+
+        if self.postal_code:
+            return self.postal_code
+
+        if self.country:
+            if self.country.iso_code in ("US", "USA"):
+                if self.region and self.city:
+                    return os.path.join(self.region.name, self.city)
+            if self.city:
+                return os.path.join(self.country.name, self.city)
+
+        if self.region and self.city:
+            return os.path.join(self.region, self.city)
+
+        return self.name # Will work if it's an airport code ...
 
 class GeoEntity(TimeStampedModel):
     """

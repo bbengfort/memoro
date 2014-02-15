@@ -8,7 +8,7 @@ before_install:
 - ./configure
 - make
 - sudo make install
-- ldconfig
+- sudo ldconfig
 - cd ..
 - rm -rf libmaxminddb
 install: pip install -r requirements.txt

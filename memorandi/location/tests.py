@@ -17,6 +17,8 @@ Testing location specific code
 ## Imports
 ##########################################################################
 
+import unittest
+
 from .models import *
 from django.test import TestCase
 
@@ -60,6 +62,16 @@ class LocationModelTests(TestCase):
         )
         for idx, val in enumerate(runs):
             self.assertEqual(Location.objects.get(pk=idx+1).to_query(), val)
+
+    @unittest.expectedFailure
+    def test_geoip_import(self):
+        """
+        Check if GeoIP2 library is able to be imported
+        """
+        try:
+            import geoip2.database as geoip
+        except ImportError as e:
+            self.fail("Could not import GeoIP2: %s" % str(e))
 
 ##########################################################################
 ## Manager Test Cases

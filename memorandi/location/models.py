@@ -19,6 +19,7 @@ Models for the location metadata
 
 import os
 
+from .managers import *
 from utils import nullable
 from django.db import models
 from model_utils import Choices
@@ -48,8 +49,8 @@ class Location(TimeStampedModel):
     region       = models.ForeignKey( "GeoEntity", related_name="+", **nullable )   # Region GeoEntity
     latitude     = models.FloatField( **nullable )                # Decimal latitude
     longitude    = models.FloatField( **nullable )                # Decimal longitude
-    postal_code  = models.CharField( max_length=31 )              # Postal code
-    ipaddr       = models.IPAddressField( **nullable )            # IP Address of request
+    postal_code  = models.CharField( max_length=31, **nullable )  # Postal code
+    ipaddr       = models.GenericIPAddressField( **nullable )     # IP Address of request
     station      = models.CharField( max_length=50, **nullable )  # Prefered Weather Station
 
     class Meta:
@@ -64,31 +65,68 @@ class Location(TimeStampedModel):
         verbose_name_plural = "locations"
 
     def __unicode__(self):
+        """
+        Construct a string representation of location.
+        """
+        s = u"" # Begin string
+        f = []  # Begin format
+
+        # Add name format
         if self.name:
-            return "%s in %s, %s" % (self.name, self.city, self.region.iso_code)
-        return "%s, %s" % (self.city, self.region)
+            s += "%s "
+            f.append(self.name)
+
+        # Try city and state
+        if self.city and self.region:
+            s = s + "in %s, %s" if s else "%s, %s"
+            f.append(self.city)
+            f.append(self.region.iso_code)
+
+        # Try city and country
+        elif self.city and self.country:
+            s = s + "in %s, %s" if s else "%s, %s"
+            f.append(self.city)
+            f.append(self.country)
+
+        # Try Postal Code
+        elif self.postal_code:
+            s += "(%s)" if s else "%s"
+            f.append(self.postal_code)
+
+        # Try Longitude and Latitude
+        elif self.longitude and self.latitude:
+            s += "(%f, %f)"
+            f.append(self.latitude)
+            f.append(self.longitude)
+
+        s = s % tuple(f)
+        return s.strip()
 
     def to_query(self):
         """
         Returns a string to send to the Weather Underground API.
+        Is this too coupled to the weather app?
         """
         if self.latitude and self.longitude:
-            return ",".join(str(self.latitude), str(self.longitude))
+            return ",".join((str(self.latitude), str(self.longitude)))
 
-        if self.postal_code:
-            return self.postal_code
-
-        if self.country:
+        elif self.country:
             if self.country.iso_code in ("US", "USA"):
-                if self.region and self.city:
+
+                if self.postal_code:
+                    return self.postal_code
+
+                elif self.region and self.city:
                     return os.path.join(self.region.name, self.city)
-            if self.city:
+
+            elif self.city:
                 return os.path.join(self.country.name, self.city)
 
-        if self.region and self.city:
+        elif self.region and self.city:
             return os.path.join(self.region, self.city)
 
-        return self.name # Will work if it's an airport code ...
+        else:
+            return self.name # Will work if it's an airport code ...
 
 class GeoEntity(TimeStampedModel):
     """
@@ -112,6 +150,9 @@ class GeoEntity(TimeStampedModel):
     iso_code     = models.CharField( max_length=3 )   # ISO Code for the region or country
     region_type  = models.PositiveSmallIntegerField( choices=TYPES, default=TYPES.country ) # Type of Geographic Region
     parent       = models.ForeignKey( "GeoEntity", related_name="+", **nullable )           # Regions specify country as parent
+
+    # Geography Manager
+    objects      = GeographyManager()
 
     class Meta:
         db_table        = "geographic_entity"

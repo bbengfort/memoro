@@ -66,9 +66,10 @@ class Weather(TimeStampedModel):
         return "%s on %s" % (self.weather, self.observation)
 
     @classmethod
-    def deserialize(klass, data):
+    def deserialize(klass, data, location):
         """
         Constructs an object from the Weather Underground JSON data.
+        Must specify a location related object from the database.
         """
 
         template = (
@@ -93,4 +94,7 @@ class Weather(TimeStampedModel):
         kwargs = {}
         for field, wufield, converter in template:
             kwargs[field] = converter(data.get(wufield, u''))
-        return klass(**kwargs)
+        instance = klass(**kwargs)
+        instance.location = location
+
+        return instance

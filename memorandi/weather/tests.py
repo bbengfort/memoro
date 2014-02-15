@@ -18,7 +18,9 @@ Testing the weather app
 ##########################################################################
 
 from .wunder import *
+from .models import *
 from urlparse import urljoin
+from location.models import *
 from django.test import TestCase
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -115,3 +117,26 @@ class WunderTests(TestCase):
         response = wunder.fetch_weather("DC/Washington")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
+
+class WeatherManagerTests(TestCase):
+    """
+    Tests the Weather Manager
+    """
+
+    fixtures = ['landmarks.json',]
+
+    def test_current_weather(self):
+        """
+        Test get or create functionality of manager
+        """
+        location = Location.objects.get(pk=1)
+
+        # Check that weather is fetched via the API
+        weather, created = Weather.objects.current_weather(location)
+        self.assertTrue(weather)
+        self.assertTrue(created)
+
+        # Check that the weather is fetched from the Database
+        weather, created = Weather.objects.current_weather(location)
+        self.assertTrue(weather)
+        self.assertFalse(created)

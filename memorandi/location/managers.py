@@ -17,9 +17,14 @@ Manager classes to handle location queries
 ## Imports
 ##########################################################################
 
+try:
+    import geoip2.database as geoip
+except ImportError:
+    geoip = None
+
 from django.db import models
-import geoip2.database as geoip
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
 ##########################################################################
 ## Location Managers
@@ -34,6 +39,9 @@ class LocationManager(models.Manager):
         """
         Creates a location with an IP address
         """
+        if geoip is None or not hasattr(settings, 'GEOIP2_CITY'):
+            raise ImproperlyConfigured("Maxmind libraries not installed, cannot perform GeoIP lookup.")
+
         mmdb   = mmdb or settings.GEOIP2_CITY
         reader = geoip.Reader(mmdb)
         result = reader.city(addr)

@@ -217,3 +217,7 @@ REST_FRAMEWORK = {
 WEATHER_UNDERGROUND = {
     "API_KEY": environ_setting("WUNDER_API_KEY", ""), # Default is empty key
 }
+
+GEOIP2_PATH    = environ_setting("GEOIP2_PATH", "")                 # Default is current working directory
+GEOIP2_CITY    = os.path.join(GEOIP2_PATH, "GeoLite2-City.mmdb")    # City MMDB database
+GEOIP2_COUNTRY = os.path.join(GEOIP2_PATH, "GeoLite2-Country.mmdb") # Country MMDB database

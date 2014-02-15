@@ -53,6 +53,9 @@ class Location(TimeStampedModel):
     ipaddr       = models.GenericIPAddressField( **nullable )     # IP Address of request
     station      = models.CharField( max_length=50, **nullable )  # Prefered Weather Station
 
+    # Location manager
+    objects      = LocationManager()
+
     class Meta:
         db_table        = "location"
         verbose_name    = "location"
@@ -63,6 +66,23 @@ class Location(TimeStampedModel):
         ordering        = ["-modified",]
         get_latest_by   = "modified"
         verbose_name_plural = "locations"
+
+    @classmethod
+    def from_mmdb(klass, record):
+        """
+        Constructs a location instance from a Maximind DB record
+        """
+        kwargs = {
+            'city': record.city.name,
+            'country': GeoEntity.objects.iso_code(record.country.iso_code),
+            'postal_code': record.postal.code,
+            'latitude': record.location.latitude,
+            'longitude': record.location.longitude,
+            'ipaddr': record.traits.ip_address,
+        }
+        if len(record.subdivisions) > 0:
+            kwargs['region'] = GeoEntity.objects.iso_code(record.subdivisions[0].iso_code)
+        return klass(**kwargs)
 
     def __unicode__(self):
         """
@@ -107,7 +127,10 @@ class Location(TimeStampedModel):
         Returns a string to send to the Weather Underground API.
         Is this too coupled to the weather app?
         """
-        if self.latitude and self.longitude:
+        if self.station:
+            return "pws:%s" % self.station
+
+        elif self.latitude and self.longitude:
             return ",".join((str(self.latitude), str(self.longitude)))
 
         elif self.country:

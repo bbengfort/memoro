@@ -52,7 +52,7 @@ class LocationModelTests(TestCase):
         Check the weather underground query string
         """
         runs = (
-            u"20001",   # Should we check State/City for U.S. locations?
+            u"pws:KDCWASHI18",   # Should we check State/City for U.S. locations?
             u"DCA",
             u"38.921618,-77.011506",
             u"France/Paris",

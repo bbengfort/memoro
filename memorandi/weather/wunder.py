@@ -18,6 +18,7 @@ Wrapper to fetch Weather Underground data
 ##########################################################################
 
 import os
+import urllib
 import requests
 import urlparse
 import w3lib.url
@@ -140,7 +141,7 @@ class Wunder(object):
         """
         frmt  = kwargs.pop('format', 'json')
         url   = self.get_features_endpoint(*features)
-        query = ".".join((query, frmt))
+        query = urllib.quote(".".join((query, frmt)))
         return w3lib.url.safe_download_url(urlparse.urljoin(url, query))
 
     def fetch_weather(self, query, *features, **kwargs):

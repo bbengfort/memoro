@@ -99,6 +99,7 @@ INSTALLED_APPS   = (
     'location',
     'weather',
     'narrate',
+    'authors',
     'api',
 )
 
@@ -110,6 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'authors.middleware.AuthorMiddleware',
 )
 
 ## Localization
@@ -143,6 +145,9 @@ TEMPLATE_DIRS       = (
 ## Uploaded Media
 MEDIA_URL           = "/media/"
 
+## User Stuf
+AUTH_PROFILE_MODULE = "authors.Profile"
+
 ## Suit Admin Config
 SUIT_CONFIG         = {
     "ADMIN_NAME": "Memorandi Admin",
@@ -165,6 +170,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
+    "authors.context_processors.author",
 )
 
 ##########################################################################

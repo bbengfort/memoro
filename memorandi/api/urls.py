@@ -30,6 +30,8 @@ endpoints = (
     (r'locations', views.LocationViewSet),
     (r'weather', views.WeatherViewSet),
     (r'journal', views.JournalViewSet),
+    (r'profile', views.ProfileViewSet),
+    (r'author', views.AuthorViewSet),
 )
 
 # Create Router from Endpoints

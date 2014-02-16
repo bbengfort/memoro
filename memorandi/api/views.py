@@ -17,14 +17,17 @@ Viewsets for the RESTful API
 ## Imports
 ##########################################################################
 
-from location.models import Location
 from weather.models import Weather
+from location.models import Location
 from narrate.models import Memorandum
-from rest_framework import viewsets
-from location.serializers import *
+from authors.models import Profile, Author
+
 from weather.serializers import *
 from narrate.serializers import *
+from authors.serializers import *
+from location.serializers import *
 
+from rest_framework import viewsets
 from rest_framework.decorators import link, action
 from rest_framework.response import Response
 
@@ -58,3 +61,14 @@ class JournalViewSet(viewsets.ModelViewSet):
         if not request.DATA.get('author', None):
             request.DATA['author'] = request.user.pk
         return super(JournalViewSet, self).create(request)
+
+class AuthorViewSet(viewsets.ModelViewSet):
+
+    lookup_field = "username"
+    queryset     = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+class ProfileViewSet(viewsets.ModelViewSet):
+
+    queryset     = Profile.objects.all()
+    serializer_class = ProfileSerializer

@@ -23,7 +23,7 @@ DJANGO_TEST_SETTINGS_MODULE = $(PROJECT).settings.$(TEST_SETTINGS)
 DJANGO_TEST_POSTFIX := --settings=$(DJANGO_TEST_SETTINGS_MODULE) --pythonpath=$(PYTHONPATH)
 
 # Apps to test
-APPS := weather narrate location api
+APPS := weather narrate location authors api
 
 # Export targets not associated with files
 .PHONY: test showenv coverage bootstrap pip virtualenv clean virtual_env_set

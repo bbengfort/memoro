@@ -19,6 +19,8 @@ Testing the weather app
 
 from .wunder import *
 from .models import *
+from .managers import *
+from utils.timez import now
 from urlparse import urljoin
 from location.models import *
 from django.test import TestCase
@@ -140,3 +142,11 @@ class WeatherManagerTests(TestCase):
         weather, created = Weather.objects.current_weather(location)
         self.assertTrue(weather)
         self.assertFalse(created)
+
+    def test_hour_range_now(self):
+        """
+        Check the hour range functionality
+        """
+        rng = hour_range()
+        self.assertLess(rng[0], now())
+        self.assertGreater(rng[1], now())

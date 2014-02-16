@@ -22,7 +22,9 @@ body {
     background-color: #fff;
     border-top: 1px solid #eee;
     height: 76px;
-    padding: 18px 15px;
+    padding: 30px 15px;
+    font-size: 16px
+    font-family: 'Open Sans Condensed' sans-serif;
 }
 
 #footer p {

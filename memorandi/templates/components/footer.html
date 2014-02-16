@@ -1,12 +1,18 @@
     <div id="footer">
-      <div class="container">
+      <div class="container-fluid">
         <div class="row">
-          <div class="col-sm-12">
-            <p class="text-center">
-              Created by <a href="https://twitter.com/bbengfort/">@bbengfort</a>
-            </p>
-            <p class="text-center text-muted">
-              <small>Copyright &copy; 2014 Benjamin Bengfort: All Rights Reserved</small>
+          <div class="col-xs-6">
+            <ul class="list-unstyled list-inline">
+              <li><a href="{% url 'terms' %}">Terms</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy</a></li>
+              <li><a href="{% url 'api-root' %}">API</a></li>
+              <li><a href="https://github.com/bbengfort/memorandi/"><i class="fa fa-github"></i></a></li>
+              <li><a href="https://twitter.com/bbengfort/"><i class="fa fa-twitter"></i></a></li>
+            </ul>
+          </div>
+          <div class="col-xs-6">
+            <p class="text-right text-muted">
+              Copyright &copy; 2014 Benjamin Bengfort
             </p>
           </div>
         </div>

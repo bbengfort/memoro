@@ -1,11 +1,92 @@
 {% extends 'page.html' %}
+{% load staticfiles %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="{% static 'css/splash.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+  {% include 'components/splashbar.html' %}
+{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Welcome to the Memorandi App, {{ request.author }}</h1>
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="{% static 'img/diary-wallpaper.jpg' %}" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <p><blockquote>Perception, which is the faculty of detaching the significant from the things observed, is a rare talent.  The diarist who possesses it will never fail to keep alert a reader of his record.</blockquote></p>
+              <p>Arthur Ponsonby</p>
+              <!--<p><a class="btn btn-lg btn-default" href="#" role="button">Create Account</a></p> -->
             </div>
+          </div>
         </div>
+        <div class="item">
+          <img src="{% static 'img/fountain-pen-on-paper.jpg' %}" alt="Third slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <p><blockquote>I wish to set down such choice experiences that my own writings may inspire me. &hellip; I am greedy of occasions to express myself.</blockquote></p>
+              <p>Henry David Thoreau</p>
+              <!--<p><a class="btn btn-lg btn-default" href="#" role="button">Create Account</a></p> -->
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/coffee-notepad.jpg' %}" alt="Second slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <p><blockquote>To Nobody, then will I write my Journal!  Since to Nobody can I be wholly unreserved.</blockquote></p>
+              <p>Fanny Burney</p>
+              <!--<p><a class="btn btn-lg btn-default" href="#" role="button">Create Account</a></p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+
+    <div class="container">
+
+      <div class="row text-center">
+        <div class="col-sm-12">
+          <h2>How it works</h2>
+        </div>
+
+        <div class="col-sm-4">
+          <h3><i class="fa fa-pencil"></i> Minimalist Writing</h3>
+          <p class="text-justify">A distraction-free writing interface allows you to focus on
+          your thoughts. Writing prompts can be set to help you focus on
+          particular areas.</p>
+        </div>
+        <div class="col-sm-4">
+          <h3><i class="fa fa-coffee"></i> Meta Capture</h3>
+          <p class="text-justify">Automatically records where you are and what the weather is,
+          to create a professional, scientific-style journal that has
+          detailed environmental information to frame your thoughts. Other
+          meta data will be added in the future.</p>
+        </div>
+        <div class="col-sm-4">
+          <h3><i class="fa fa-lock"></i> Private Entries</h3>
+          <p class="text-justify">This isn't a blog. Don't think about your audience. If you'd
+          like, publishing comes later. Right now, just focus on the
+          journal.</p>
+        </div>
+      </div>
+
     </div>
+
+{% endblock %}
+
+{% block modals %}
+  {% include "modals/login.html" %}
+  {% include "modals/registration.html" %}
 {% endblock %}

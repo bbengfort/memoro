@@ -4,6 +4,7 @@ html,
 body {
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
+  font-family: 'Open Sans', sans-serif;
 }
 
 /* Wrapper for page content to push down footer */
@@ -26,4 +27,22 @@ body {
 
 #footer p {
     margin: 0;
+}
+
+/* Helper classes */
+
+.text-justify {
+  text-align: justify;
+}
+
+.modal {
+  z-index: 1200;
+}
+
+nav {
+  z-index: 2;
+}
+
+.navbar-header {
+  min-width: 300px;
 }

@@ -31,6 +31,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Application URLs
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^accounts/', include('authors.urls'), name='accounts'),
 
     # API Endpoints
     url(r'^api/', include('api.urls'), name='api'),

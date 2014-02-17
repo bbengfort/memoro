@@ -18,6 +18,20 @@ Request middleware to help with author management
 ##########################################################################
 
 from .models import Author
+from ipware.ip import get_real_ip
+
+##########################################################################
+## Helper functions
+##########################################################################
+
+def result_or_none(func):
+    """
+    Captures exceptions and returns None if that happens.
+    """
+    try:
+        return func()
+    except:
+        return None
 
 ##########################################################################
 ## Middleware
@@ -29,8 +43,6 @@ class AuthorMiddleware(object):
     """
 
     def process_request(self, request):
-        try:
-            request.author = Author.fromUser(request.user)
-        except:
-            request.author = None
+        request.author = result_or_none(lambda: Author.fromUser(request.user))
+        request.ipaddr = result_or_none(lambda: get_real_ip(request))
         return None

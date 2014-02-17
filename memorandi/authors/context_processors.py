@@ -24,8 +24,15 @@ from .models import Author
 ##########################################################################
 
 def author(request):
+    """
+    Move context added to request into top level of context.
+    """
+    context = {}
+
     if hasattr(request, 'author'):
-        return {
-            'author': author,
-        }
-    return {}
+        context['author'] = request.author
+
+    if hasattr(request, 'ipaddr'):
+        context['ipaddr'] = request.ipaddr
+
+    return context

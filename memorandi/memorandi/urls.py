@@ -19,6 +19,7 @@ URL Endpoints for the Memorandi Project
 
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
+from narrate.views import SplashPage
 
 # Admin Autodiscover
 from django.contrib import admin
@@ -30,11 +31,12 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Static pages
-    url(r'^$', TemplateView.as_view(template_name='site/index.html'), name='home'),
+    url(r'^$', SplashPage.as_view(), name='home'),
     url(r'^terms/$', TemplateView.as_view(template_name='site/legal/terms.html'), name='terms'),
     url(r'^privacy/$', TemplateView.as_view(template_name='site/legal/privacy.html'), name='privacy'),
 
     # Application URLs
+    url(r'^app/', include('narrate.urls'), name='app'),
     url(r'^accounts/', include('authors.urls'), name='accounts'),
 
     # API Endpoints

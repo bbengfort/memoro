@@ -29,4 +29,5 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     url(r'^$', WebAppView.as_view(), name="app-root"),
+    url(r'^write/$', WriteView.as_view(), name="app-write"),
 )

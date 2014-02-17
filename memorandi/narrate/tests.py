@@ -71,12 +71,14 @@ class NarrateViewsTest(TestCase):
 
         # List of views that should be protected
         protected = (
-            'api-root',
+            'app-root',
+            'app-write'
         )
-        msg = "View '%s' responded to unauthenticated user."
+        msg       = "View '%s' ('%s') responded to unauthenticated user."
 
         for name in protected:
             self.client.logout()  # Ensure we're logged out
             url = reverse(name)   # Get the url for this view
+            login_url = reverse('LoginView') + '?next=' + url
             response = self.client.get(url)
-            self.assertEqual(response.status_code, 403, msg % name)
+            self.assertRedirects(response, login_url, msg_prefix=msg % (name, url))

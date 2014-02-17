@@ -50,3 +50,10 @@ class WebAppView(LoginRequiredMixin, TemplateView):
     """
 
     template_name = "app/index.html"
+
+class WriteView(LoginRequiredMixin, TemplateView):
+    """
+    Authenticated distraction free writing.
+    """
+
+    template_name = "app/write.html"

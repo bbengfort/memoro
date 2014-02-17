@@ -63,7 +63,7 @@ class Weather(TimeStampedModel):
         verbose_name_plural = "weather"
 
     def __unicode__(self):
-        return "%s on %s" % (self.weather, self.observation)
+        return "%s on %s" % (self.weather, self.observation.strftime(RFC822_DATETIME))
 
     @classmethod
     def deserialize(klass, data, location):

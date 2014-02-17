@@ -63,6 +63,15 @@ class WeatherManager(models.Manager):
             # Deserialize object
             if conditions:
                 obj = self.model.deserialize(conditions, location)
+
+                # Check that we actually have a new observation
+                # This is the case where we are in a new hour, but have no
+                # new observation data from the API.
+                met = self.filter(station_id=obj.station_id, observation=obj.observation)
+                if met.count() > 0:
+                    return met.latest()
+
+                # Save the object to the database and return it
                 obj.save(force_insert=True)
                 return obj
 

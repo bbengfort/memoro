@@ -24,6 +24,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 ##########################################################################
 
 import os
+from django.core.urlresolvers import reverse_lazy
 
 ##########################################################################
 ## Helper function for environmental settings
@@ -120,6 +121,13 @@ TIME_ZONE     = 'America/New_York'
 USE_I18N      = True
 USE_L10N      = True
 USE_TZ        = True
+
+## Login URLs
+LOGIN_REDIRECT_URL = reverse_lazy('app-root')   # Named pattern for the application root
+LOGIN_URL          = reverse_lazy('LoginView')  # Named pattern for the login class
+LOGOUT_URL         = reverse_lazy('LogoutView') # Named pattern for the logout class
+# Note: For some reason, even though we're in Django 1.6 simply using the
+# name of the view did not work as expected. Reverse lazy does work though.
 
 ##########################################################################
 ## Content (Static, Media, Templates)

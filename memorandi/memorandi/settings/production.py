@@ -28,7 +28,7 @@ DEBUG            = False
 TEMPLATE_DEBUG   = False
 
 ## Hosts
-ALLOWED_HOSTS    = []
+ALLOWED_HOSTS    = ['.memorandi.com.']
 
 ## Content
 STATIC_ROOT      = "/var/www/memorandi/static/"

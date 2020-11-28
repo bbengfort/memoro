@@ -17,3 +17,11 @@ Project environment for the memoro web application.
 ## Imports
 ##########################################################################
 
+from .version import __version_info__, get_version
+
+
+##########################################################################
+## Package Info
+##########################################################################
+
+__version__ = get_version()

@@ -32,7 +32,19 @@ Including another URLconf
 ##########################################################################
 
 from django.contrib import admin
-from django.urls import path
+from rest_framework import routers
+from django.urls import path, include
+
+from memoro.views import HeartbeatViewSet, Overview
+
+
+##########################################################################
+## API Endpoints
+##########################################################################
+
+# Top level router
+router = routers.DefaultRouter()
+router.register(r'status', HeartbeatViewSet, "status")
 
 
 ##########################################################################
@@ -41,4 +53,17 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", include("django.contrib.auth.urls")),
+    path("", Overview.as_view(), name="overview"),
+    path('api/', include((router.urls, 'rest_framework'), namespace="api")),
 ]
+
+
+##########################################################################
+## Error handling
+##########################################################################
+
+handler400 = "memoro.views.bad_request"
+handler403 = "memoro.views.permission_denied"
+handler404 = "memoro.views.not_found"
+handler500 = "memoro.views.server_error"

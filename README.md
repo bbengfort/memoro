@@ -1,4 +1,4 @@
-# Memorandi [![Build Status][travis_status.png]][travis_build]
+# Memorandi
 
 **A simple thought recording tool for personal use.**
 

@@ -3,27 +3,11 @@
 
 [![The Inner Chapters][butterfly_dream.jpg]][butterfly_dream.jpg]
 
-This simple project is intended to be a personal recording tool to capture
-private snippets from my own inner chapters. I've started and failed at
-doing this before (paper journals, blogs, etc). It is my hope that some
-small web application that performs automatic data extraction (where I am,
-what the weather is, etc.) will enable me to maintain my habit. Because
-the server is RESTful, I'm hoping that I can use it from any number of
-apps as well. I probably will also include email reminders.
-
-I'd like the memories and thoughts that I have in my daily life to be
-available to my daughter. I'm a data scientist, I'll create the data for
-her! (Also, this project is hugely procrastinating...)
+This simple project is intended to be a personal recording tool to capture private snippets from my own inner chapters. It is purposefully simple - there is only one user, me. A responsive front-end allows me to write from anywhere or any device. The main interface is data entry with a secondary catalog for me to review historical thoughts. Other APIs provide access to weather, photos, calendar etc. to link my day with their events.
 
 ## Structure ##
 
-This project isn't intended to be theraputic, but rather obeservational.
-It was inpsired from two sources: _The Inner Chapters_ by Zhuangzi as well
-as read snippets from Arthur C. Clarke's journal. What is to be recorded
-is past tense observations of my work and my daily life as well as the
-meta data that I experienced but do not put into narrative form (weather,
-location, etc). A good guide is [Introduction to Journal-Style Scientific
-Writing][htw_general].
+This project isn't intended to be theraputic, but rather obeservational. It was inpsired from two sources: _The Inner Chapters_ by Zhuangzi as well as read snippets from Arthur C. Clarke's journal. What is to be recorded is past tense observations of my work and my daily life as well as the meta data that I experienced but do not put into narrative form (weather, location, etc). A good guide is [Introduction to Journal-Style Scientific Writing][htw_general].
 
 Data Elements included for a daily entry:
 
@@ -34,7 +18,5 @@ Data Elements included for a daily entry:
 5. Descriptive tags or labels (more thought required)
 
 <!-- References -->
-[travis_status.png]: https://travis-ci.org/bbengfort/memorandi.png?branch=master
-[travis_build]: https://travis-ci.org/bbengfort/memorandi
 [butterfly_dream.jpg]: http://www.rescen.net/Chris_Bannerman/images/Illus_01_full.jpg
 [htw_general]: http://abacus.bates.edu/~ganderso/biology/resources/writing/HTWgeneral.html

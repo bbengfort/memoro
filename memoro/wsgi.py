@@ -1,5 +1,6 @@
-# memorandi.asgi
-# ASGI config for memorandi project.
+
+# memoro.wsgi
+# WSGI config for memoro project.
 #
 # Author:   Benjamin Bengfort <benjamin@bengfort.com>
 # Created:  Sat Nov 28 13:44:01 2020 -0500
@@ -7,17 +8,16 @@
 # Copyright (C) 2020 Bengfort.com
 # For license information, see LICENSE
 #
-# ID: asgi.py [] benjamin@bengfort.com $
+# ID: wsgi.py [] benjamin@bengfort.com $
 
 """
-ASGI config for memorandi project.
+WSGI config for memoro project.
 
-It exposes the ASGI callable as a module-level variable named ``application``.
+It exposes the WSGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
+https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 """
-
 
 ##########################################################################
 ## Imports
@@ -25,14 +25,14 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
 
 import os
 
-from django.core.asgi import get_asgi_application
+from django.core.wsgi import get_wsgi_application
 from dotenv import find_dotenv, load_dotenv
 
 
 ##########################################################################
-## Load environment and create ASGI application
+## Load environment and create WSGI application
 ##########################################################################
 
 load_dotenv(find_dotenv())
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'memorandi.settings')
-application = get_asgi_application()
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'memoro.settings.development')
+application = get_wsgi_application()

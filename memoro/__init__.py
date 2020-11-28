@@ -1,5 +1,5 @@
-# memorandi
-# Project environment for the memorandi web application.
+# memoro
+# Project environment for the memoro web application.
 #
 # Author:   Benjamin Bengfort <benjamin@bengfort.com>
 # Created:  Sat Nov 28 13:44:01 2020 -0500
@@ -10,7 +10,7 @@
 # ID: __init__.py [] benjamin@bengfort.com $
 
 """
-Project environment for the memorandi web application.
+Project environment for the memoro web application.
 """
 
 ##########################################################################

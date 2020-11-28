@@ -1,5 +1,5 @@
-# memorandi
-# memorandi URL Configuration
+# memoro
+# memoro URL Configuration
 #
 # Author:   Benjamin Bengfort <benjamin@bengfort.com>
 # Created:  Sat Nov 28 13:44:01 2020 -0500
@@ -10,7 +10,7 @@
 # ID: __init__.py [] benjamin@bengfort.com $
 
 """
-memorandi URL Configuration
+memoro URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/

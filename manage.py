@@ -39,7 +39,7 @@ def main():
     """
     Run administrative tasks.
     """
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'memorandi.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'memoro.settings.development')
 
     try:
         from django.core.management import execute_from_command_line

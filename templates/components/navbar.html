@@ -1,0 +1,61 @@
+{% load static %}
+{% load gravatar %}
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'img/bear.png' %}" />
+        Memoro
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'overview' %}">Daily
+              <span class="sr-only">(current)</span>
+            </a>
+            <!-- Nav Item - User Information -->
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{% if user.faculty %}{{ user.faculty.get_full_name }}{% else %}{{ user.get_full_name }}{% endif %}</span>
+                <img class="img-profile rounded" src="{{ user|gravatar:24 }}">
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                Settings
+                </a>
+                <a class="dropdown-item" href="#">
+                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                Activity Log
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                Logout
+                </a>
+            </div>
+            </li>
+            {% else %}
+            <li class="nav-item mx-1">
+            <a class="nav-link text-gray-600" href="{% url 'login' %}">
+                <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2"></i>
+                Login
+            </a>
+            </li>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>

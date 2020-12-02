@@ -1,24 +1,21 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<!-- Page Wrapper -->
-<div id="wrapper">
 
-  <!-- Content Wrapper -->
-  <div id="content-wrapper" class="d-flex flex-column">
-    <!-- Main Content -->
-    <div id="content">
-    {% block content %}
-      <!-- Begin Page Content -->
-      <div class="container-fluid">
-      {% block page %}
-      {% endblock %}
-      </div><!-- End Page Content -->
-    {% endblock %}
-    </div><!-- End Main Content -->
-  </div><!-- End Content Wrapper -->
-</div><!-- End Page Wrapper -->
+  {% block navbar %}
+  {% include 'components/navbar.html' %}
+  {% endblock %}
 
+  <!-- Page Content -->
+  <div id="page-content">
+    <div class="container">
+    {% block page %}{% endblock %}
+    </div><!-- container ends -->
+  </div><!-- page-content ends -->
+
+  {% block footer %}
+  {% include 'components/footer.html' %}
+  {% endblock %}
 
   {% block modals %}
   {{ block.super }}

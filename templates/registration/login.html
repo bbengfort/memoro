@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="{% static 'css/signin.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+
+            {% block login_alert %}
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              Credentials invalid. Please try again.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% endif %}
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% if next %}
+            {% if user.is_authenticated %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              Your account does not have access to this page.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% else %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              You must login to access Memoro.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% endif %}
+            {% endif %}
+            {% endblock %}
+
+            <h5 class="card-title text-center">Sign In</h5>
+            <form class="form-signin" role="form" action="{% url 'login' %}" method="post">
+              <div class="form-label-group">
+                <input type="text" class="form-control" placeholder="Username"
+                  id="username" name="username" maxlength="254" required autofocus>
+                <label for="username">Username</label>
+              </div>
+              <div class="form-label-group">
+                <input type="password" class="form-control form-control-user" placeholder="Password"
+                  id="password" name="password" required>
+                <label for="password">Password</label>
+              </div>
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+              <input type="hidden" name="next" value="{{ next }}" />
+              {% csrf_token %}
+            </form>
+          </div><!-- card-body ends -->
+        </div><!-- card-signin ends -->
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

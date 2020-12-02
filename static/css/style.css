@@ -1,0 +1,29 @@
+/*!
+ * Memoro base styles
+ * Copyright 2020 Bengfort.com
+ * See LICENSE.txt
+ */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+    padding-top: 64px;
+}
+
+#page-content {
+  flex: 1 0 auto;
+}
+
+#sticky-footer {
+  flex-shrink: none;
+}
+
+.navbar-brand img {
+    width: 28px;
+    height: 28px;
+    padding-bottom: 3px;
+    margin-right: 2px;
+}

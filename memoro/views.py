@@ -38,6 +38,11 @@ class Overview(LoginRequiredMixin, TemplateView):
 
     template_name = "site/overview.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(Overview, self).get_context_data(**kwargs)
+        context['page'] = 'overview'
+        return context
+
 
 ##########################################################################
 ## API Views

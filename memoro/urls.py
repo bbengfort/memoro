@@ -35,6 +35,7 @@ from django.contrib import admin
 from rest_framework import routers
 from django.urls import path, include
 
+from diary.views import Today
 from memoro.views import HeartbeatViewSet, Overview
 
 
@@ -54,7 +55,8 @@ router.register(r'status', HeartbeatViewSet, "status")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("django.contrib.auth.urls")),
-    path("", Overview.as_view(), name="overview"),
+    path("", Today.as_view(), name="today"),
+    path("overview/", Overview.as_view(), name="overview"),
     path('api/', include((router.urls, 'rest_framework'), namespace="api")),
 ]
 

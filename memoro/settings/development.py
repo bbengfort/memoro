@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 MEDIA_ROOT = PROJECT / 'tmp' / 'media'
 STATIC_ROOT = PROJECT / 'tmp' / 'static'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Debugging email without SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'

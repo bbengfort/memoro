@@ -42,3 +42,4 @@ DATABASES['default']['TEST'] = {'NAME': 'memoro_test'}
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 MEDIA_ROOT = TESTDIR / "media"
 STATIC_ROOT = TESTDIR / "static"
+

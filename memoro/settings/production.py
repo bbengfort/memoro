@@ -40,3 +40,4 @@ SECURE_SSL_REDIRECT = True
 
 # Serve static files from inside project directory
 STATIC_ROOT = PROJECT / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

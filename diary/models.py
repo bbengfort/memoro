@@ -153,6 +153,11 @@ class Location(TimeStampedModel):
         help_text="Postal code of the address or other coded identification"
     )
 
+    quick_select = models.BooleanField(
+        default=False,
+        help_text="Allow this location to appear in quick select forms"
+    )
+
     class Meta:
         db_table = "locations"
         ordering = ("-modified",)
@@ -237,22 +242,22 @@ class Tabs(TimeStampedModel):
     )
 
     desktop_windows = models.PositiveSmallIntegerField(
-        default=0,
+        default=None, null=True, blank=True,
         help_text="The number of desktop windows open"
     )
 
     desktop_tabs = models.PositiveSmallIntegerField(
-        default=0,
+        default=None, null=True, blank=True,
         help_text="The total number of desktop tabs open in all windows"
     )
 
     mobile_tabs = models.PositiveSmallIntegerField(
-        default=0,
+        default=None, null=True, blank=True,
         help_text="The number of tabs open on your mobile device"
     )
 
     tablet_tabs = models.PositiveSmallIntegerField(
-        default=0,
+        default=None, null=True, blank=True,
         help_text="The number of tabs open on your tablet device"
     )
 

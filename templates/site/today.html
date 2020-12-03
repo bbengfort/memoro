@@ -1,9 +1,124 @@
 {% extends 'page.html' %}
 
 {% block page %}
-  <div class="row">
+  <div id="alerts" class="row mb-2">
     <div class="col">
-      <h1>Today</h1>
+      {% if form.errors %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Unable to save today's memoro entry.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row mb-6">
+    <div class="col">
+      <h1 class="page-title">{{ object }}</h1>
+      <form class="today-form mt-4" role="form" method="post" action="{% url 'today' %}">
+        <div class="form-group">
+          <input type="text" class="form-control{% if form.errors.memo %} is-invalid{% endif %}"
+            id="id_memo" name="memo"
+            aria-describedby="memoHelp" maxlength="255" required
+            {% if object.memo %}value="{{ object.memo }}"{% endif %}
+            />
+          <small id="memoHelp" class="form-text text-muted">What is the short headline for today?</small>
+          <div class="invalid-feedback">{% for err in form.errors.memo %}{{ err }}{% endfor %}</div>
+        </div>
+
+        <div class="form-group">
+          <textarea class="form-control{% if form.errors.entry %} is-invalid{% endif %}"
+            id="id_entry" name="entry" rows="12" aria-describedby="entryHelp">{% if object.entry %}{{ object.entry }}{% endif %}</textarea>
+          <small id="entryHelp" class="form-text text-muted">What happened today? (Feel free to use Markdown)</small>
+          <div class="invalid-feedback">{% for err in form.errors.entry %}{{ err }}{% endfor %}</div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-sm-6">
+            <select class="custom-select{% if form.errors.location %} is-invalid{% endif %}"
+              id="id_location" name="location"
+              aria-describedby="locationHelp">
+              <option>---</option>
+              {% for location in locations %}
+              <option value="{{ location.id }}" {% if object.location == location %}selected{% endif %}>{{ location }}</option>
+              {% endfor %}
+            </select>
+            <small id="locationHelp" class="form-text text-muted">Where are you writing this from?</small>
+            <div class="invalid-feedback">{% for err in form.errors.location %}{{ err }}{% endfor %}</div>
+          </div>
+          <div class="col-sm-6">
+            <select class="custom-select{% if form.errors.feeling %} is-invalid{% endif %}"
+              id="id_feeling" name="feeling"
+              aria-describedby="feelingHelp">
+              <option>---</option>
+              {% for feel in feelings %}
+              <option value="{{ feel.0 }}" {% if object.feeling == feel.0 %}selected{% endif %}>{{ feel.1|title }}</option>
+              {% endfor %}
+            </select>
+            <small id="feelingHelp" class="form-text text-muted">How did you feel today was?</small>
+            <div class="invalid-feedback">{% for err in form.errors.feeling %}{{ err }}{% endfor %}</div>
+          </div>
+        </div>
+
+        <!-- Browser tabs form -->
+        <fieldset class="form-group form-row mt-2">
+          <legend class="text-muted">Browser Tabs</legend>
+          <div class="col-md-3 col-sm-6">
+            <input type="text" class="form-control{% if form.errors.desktop_windows %} is-invalid{% endif %}"
+              id="id_desktop_windows" name="desktop_windows"
+              aria-describedby="desktopWindowsHelp"
+              value="{{ object.tabs.desktop_windows }}" placeholder="0"
+              />
+            <small id="desktopWindowsHelp" class="form-text text-muted">Open browser windows</small>
+            <div class="invalid-feedback">{% for err in form.errors.desktop_windows %}{{ err }}{% endfor %}</div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <input type="text" class="form-control{% if form.errors.desktop_tabs %} is-invalid{% endif %}"
+              id="id_desktop_tabs" name="desktop_tabs"
+              aria-describedby="desktopTabsHelp"
+              value="{{ object.tabs.desktop_tabs }}" placeholder="0"
+              />
+            <small id="desktopTabsHelp" class="form-text text-muted">Total open browser tabs</small>
+            <div class="invalid-feedback">{% for err in form.errors.desktop_tabs %}{{ err }}{% endfor %}</div>
+            {{ form.errors.desktop_tabs }}
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <input type="text" class="form-control{% if form.errors.mobile_tabs %} is-invalid{% endif %}"
+              id="id_mobile_tabs" name="mobile_tabs"
+              aria-describedby="mobileTabsHelp"
+              value="{{ object.tabs.mobile_tabs }}" placeholder="0"
+              />
+            <small id="mobileTabsHelp" class="form-text text-muted">Tabs in mobile browser</small>
+            <div class="invalid-feedback">{% for err in form.errors.mobile_tabs %}{{ err }}{% endfor %}</div>
+            {{ form.errors.mobile_tabs }}
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <input type="text" class="form-control{% if form.errors.tablet_tabs %} is-invalid{% endif %}"
+              id="id_tablet_tabs" name="tablet_tabs"
+              aria-describedby="tabletTabsHelp"
+              value="{{ object.tabs.tablet_tabs }}" placeholder="0"
+              />
+            <small id="tabletTabsHelp" class="form-text text-muted">Tabs on iPad browser</small>
+            <div class="invalid-feedback">{% for err in form.errors.tablet_tabs %}{{ err }}{% endfor %}</div>
+            {{ form.errors.tablet_tabs }}
+          </div>
+        </fieldset>
+
+        <div class="form-group">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="id_private" name="private" {% if object.private %}checked{% endif %}>
+            <label class="custom-control-label" for="id_private">Privacy Mode</label>
+          </div>
+        </div>
+
+        <!-- Form Controls -->
+        <div class="form-group">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
 {% endblock %}

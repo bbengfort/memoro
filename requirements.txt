@@ -5,6 +5,7 @@ django-markdownify==0.8.1
 django-model-utils==4.1.1
 django-rest-framework==0.1.0
 djangorestframework==3.12.2
+gunicorn==20.0.4
 psycopg2==2.8.6
 python-dotenv==0.15.0
 

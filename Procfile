@@ -1,0 +1,1 @@
+web: gunicorn memoro.wsgi --log-file -

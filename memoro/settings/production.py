@@ -32,6 +32,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'memoro.us',
     'memoro.bengfort.com',
+    'bengfort-memoro.herokuapp.com',
 ]
 
 # Always use SSL

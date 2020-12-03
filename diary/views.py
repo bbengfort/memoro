@@ -34,11 +34,6 @@ class Today(LoginRequiredMixin, UpdateView):
     form_class = TodayForm
     template_name = "site/today.html"
 
-    def form_valid(self, form):
-        print(form.cleaned_data["memo"])
-        print(form.cleaned_data["desktop_windows"])
-        return super(Today, self).form_valid(form)
-
     def get_success_url(self):
         """
         Send the user back to the today view.

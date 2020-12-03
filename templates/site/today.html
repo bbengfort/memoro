@@ -69,7 +69,8 @@
             <input type="text" class="form-control{% if form.errors.desktop_windows %} is-invalid{% endif %}"
               id="id_desktop_windows" name="desktop_windows"
               aria-describedby="desktopWindowsHelp"
-              value="{{ object.tabs.desktop_windows }}" placeholder="0"
+              value="{% if object.tabs.desktop_windows %}{{ object.tabs.desktop_windows }}{% endif %}"
+              placeholder="0"
               />
             <small id="desktopWindowsHelp" class="form-text text-muted">Open browser windows</small>
             <div class="invalid-feedback">{% for err in form.errors.desktop_windows %}{{ err }}{% endfor %}</div>
@@ -78,38 +79,40 @@
             <input type="text" class="form-control{% if form.errors.desktop_tabs %} is-invalid{% endif %}"
               id="id_desktop_tabs" name="desktop_tabs"
               aria-describedby="desktopTabsHelp"
-              value="{{ object.tabs.desktop_tabs }}" placeholder="0"
+              value="{% if object.tabs.desktop_tabs %}{{ object.tabs.desktop_tabs }}{% endif %}"
+              placeholder="0"
               />
             <small id="desktopTabsHelp" class="form-text text-muted">Total open browser tabs</small>
             <div class="invalid-feedback">{% for err in form.errors.desktop_tabs %}{{ err }}{% endfor %}</div>
-            {{ form.errors.desktop_tabs }}
           </div>
           <div class="col-md-3 col-sm-6">
             <input type="text" class="form-control{% if form.errors.mobile_tabs %} is-invalid{% endif %}"
               id="id_mobile_tabs" name="mobile_tabs"
               aria-describedby="mobileTabsHelp"
-              value="{{ object.tabs.mobile_tabs }}" placeholder="0"
+              value="{% if object.tabs.mobile_tabs %}{{ object.tabs.mobile_tabs }}{% endif %}"
+              placeholder="0"
               />
             <small id="mobileTabsHelp" class="form-text text-muted">Tabs in mobile browser</small>
             <div class="invalid-feedback">{% for err in form.errors.mobile_tabs %}{{ err }}{% endfor %}</div>
-            {{ form.errors.mobile_tabs }}
           </div>
           <div class="col-md-3 col-sm-6">
             <input type="text" class="form-control{% if form.errors.tablet_tabs %} is-invalid{% endif %}"
               id="id_tablet_tabs" name="tablet_tabs"
               aria-describedby="tabletTabsHelp"
-              value="{{ object.tabs.tablet_tabs }}" placeholder="0"
+              value="{% if object.tabs.tablet_tabs %}{{ object.tabs.tablet_tabs }}{% endif %}"
+              placeholder="0"
               />
             <small id="tabletTabsHelp" class="form-text text-muted">Tabs on iPad browser</small>
             <div class="invalid-feedback">{% for err in form.errors.tablet_tabs %}{{ err }}{% endfor %}</div>
-            {{ form.errors.tablet_tabs }}
           </div>
         </fieldset>
 
         <div class="form-group">
           <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="id_private" name="private" {% if object.private %}checked{% endif %}>
+            <input type="checkbox" class="custom-control-input{% if form.errors.private %} is-invalid{% endif %}"
+              id="id_private" name="private" {% if object.private %}checked{% endif %}>
             <label class="custom-control-label" for="id_private">Privacy Mode</label>
+            <div class="invalid-feedback">{% for err in form.errors.private %}{{ err }}{% endfor %}</div>
           </div>
         </div>
 

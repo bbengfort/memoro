@@ -18,7 +18,9 @@ Form classes for interacting with model objects.
 ##########################################################################
 
 from django import forms
-from diary.models import Memo
+from django.core.exceptions import ObjectDoesNotExist
+
+from diary.models import Memo, Tabs
 
 
 ##########################################################################
@@ -38,4 +40,27 @@ class TodayForm(forms.ModelForm):
             "memo", "entry", "private", "feeling", "location",
             "desktop_windows", "desktop_tabs", "mobile_tabs", "tablet_tabs",
         ]
+
+    def save(self):
+        """
+        Saves the related objects to Today's memo in along with the form.
+        """
+        # Save the form data before moving on to other fields
+        super(TodayForm, self).save()
+
+        # Save the tabs one to one model
+        tabs_fields = ["desktop_windows", "desktop_tabs", "mobile_tabs", "tablet_tabs"]
+        tabs_data = {
+            field: self.cleaned_data[field]
+            for field in tabs_fields
+            if self.cleaned_data[field] is not None
+        }
+
+        if tabs_data:
+            try:
+                for name, attr in tabs_data.items():
+                    setattr(self.instance.tabs, name, attr)
+                self.instance.tabs.save()
+            except ObjectDoesNotExist:
+                Tabs.objects.create(memo=self.instance, **tabs_data)
 

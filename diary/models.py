@@ -98,6 +98,16 @@ class Memo(TimeStampedModel):
         verbose_name = "Memorandum"
         verbose_name_plural = "Memoranda"
 
+    @property
+    def feeling_emoji(self):
+        return {
+            -2: "😢",
+            -1: "😕",
+            0: "😐",
+            1: "🙂",
+            2: "😀"
+        }[self.feeling]
+
     def __str__(self):
         return self.date.strftime("%A %B %d, %Y")
 

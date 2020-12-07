@@ -13,7 +13,7 @@
       </button>
       {% endif %}
 
-      <div id="entry" class="{% if object.private %}collapse{% endif %}">
+      <div id="entry" class="pb-5{% if object.private %} collapse{% endif %}">
       {{ object.entry|markdownify }}
       </div>
     </div>

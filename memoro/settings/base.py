@@ -94,6 +94,9 @@ DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ_setting("SECRET_KEY")
 
+# Used to load Google JS APIs
+GOOGLE_JS_API_KEY = environ_setting("GOOGLE_JS_API_KEY")
+
 
 ##########################################################################
 ## Runtime

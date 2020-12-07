@@ -1,5 +1,6 @@
 {% extends 'page.html' %}
 {% load markdownify %}
+{% load diary %}
 
 {% block page %}
   <!-- primary content row -->
@@ -74,10 +75,41 @@
       {% endif %}
 
       <!-- map widget -->
+      {% if object.location %}
       <div class="card my-4">
         <h5 class="card-header">Location</h5>
-        <div class="card-body"></div>
+        <div class="card-body">
+          <div id="map" style="height:300px"></div>
+        </div>
       </div>
+      {% endif %}
     </div><!-- left column ends -->
   </div><!-- primary content row ends -->
+{% endblock %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+  {% if object.location %}
+  {# Kind of a hacked way to get the location into the map, but it works #}
+  {% google_maps_js %}
+
+  <script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        const loc = {{ object.location.to_google_json|safe }};
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 10,
+          center: loc,
+        });
+        // The marker, positioned at Uluru
+        const marker = new google.maps.Marker({
+          position: loc,
+          map: map,
+        });
+      }
+    </script>
+  {% endif %}
 {% endblock %}

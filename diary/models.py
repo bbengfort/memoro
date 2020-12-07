@@ -18,6 +18,7 @@ Database model definitions.
 ##########################################################################
 
 import re
+import json
 
 from django.db import models
 from django.conf import settings
@@ -190,6 +191,12 @@ class Location(TimeStampedModel):
         )
         verbose_name = "location"
         verbose_name_plural = "locations"
+
+    def to_google_json(self):
+        return json.dumps({
+            "lat": self.latitude,
+            "lng": self.longitude,
+        })
 
     def __str__(self):
         if self.name:

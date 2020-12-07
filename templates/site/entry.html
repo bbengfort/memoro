@@ -2,46 +2,74 @@
 {% load markdownify %}
 
 {% block page %}
+  <!-- primary content row -->
   <div class="row mb-6">
+    <!-- right column -->
     <div class="col-lg-8">
-      <h1 class="page-title">{{ object }}</h1>
-      <p class="lead">{{ object.feeling_emoji }} {{ object.memo }}</p>
+      <!-- top material -->
+      <div class="my-4">
+        <!-- entry controls -->
+        <div class="float-right">
+          {% if object.private %}
+          <button class="btn btn-sm btn-link" type="button" data-toggle="collapse" data-target="#entry">
+            <i class="fa fa-lock"></i>
+          </button>
+          {% endif %}
+          <a class="btn btn-sm btn-link" type="button" href="{{ object.get_admin_url }}">
+            <i class="fa fa-pencil"></i>
+          </a>
+        </div>
 
-      {% if object.private %}
-      <button class="btn btn-danger mb-3" type="button" data-toggle="collapse" data-target="#entry">
-      Toggle Content
-      </button>
-      {% endif %}
-
-      <div id="entry" class="pb-5{% if object.private %} collapse{% endif %}">
-      {{ object.entry|markdownify }}
+        <!-- page header -->
+        <h1 class="page-title">{{ object }}</h1>
+        <p class="lead"><span class="pr-2">{{ object.feeling_emoji }}</span> {{ object.memo }}</p>
       </div>
-    </div>
 
+      <!-- entry -->
+      <div id="entry" class="{% if object.private %}collapse{% endif %}">
+      {% if object.entry %}
+      {{ object.entry|markdownify }}
+      {% endif %}
+      </div><!-- entry ends -->
+
+      <!-- navigation -->
+      <ul class="nav nav-pills nav-fill">
+        {% if prev_entry %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ prev_entry.get_absolute_url }}">&larr; Prev</a>
+        </li>
+        {% endif %}
+        {% if next_entry %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ next_entry.get_absolute_url }}">Next &rarr;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div><!-- right column ends -->
+
+    <!-- left column -->
     <div class="col-lg-4">
       {% if object.tabs %}
       <div class="card my-4">
         <h5 class="card-header">Browser Tabs</h5>
-        <div class="card-body">
-          <table class="table">
-            <tr>
-              <td>Open Windows</td>
-              <td>{{ object.tabs.desktop_windows }}</td>
-            </tr>
-            <tr>
-              <td>Desktop Tabs</td>
-              <td>{{ object.tabs.desktop_tabs }}</td>
-            </tr>
-            <tr>
-              <td>Mobile Tabs</td>
-              <td>{{ object.tabs.mobile_tabs }}</td>
-            </tr>
-            <tr>
-              <td>Tablet Tabs</td>
-              <td>{{ object.tabs.tablet_tabs }}</td>
-            </tr>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Open Windows
+            <span class="badge badge-primary badge-pill">{{ object.tabs.desktop_windows }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Desktop Tabs
+            <span class="badge badge-primary badge-pill">{{ object.tabs.desktop_tabs }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Mobile Tabs
+            <span class="badge badge-primary badge-pill">{{ object.tabs.mobile_tabs }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Tablet Tabs
+            <span class="badge badge-primary badge-pill">{{ object.tabs.tablet_tabs }}</span>
+          </li>
+        </ul>
       </div>
       {% endif %}
 
@@ -50,6 +78,6 @@
         <h5 class="card-header">Location</h5>
         <div class="card-body"></div>
       </div>
-    </div>
-  </div>
+    </div><!-- left column ends -->
+  </div><!-- primary content row ends -->
 {% endblock %}

@@ -1,10 +1,69 @@
 {% extends 'page.html' %}
+{% load static %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="{% static 'css/calendar.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
 
 {% block page %}
+  <div class="row py-4">
+    <div class="col d-flex justify-content-center calendar-head">
+      <div class="pr-5">
+        <a class="btn btn-link" href="?month={{prev_month|date:'m'}}&year={{prev_month|date:'Y'}}">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+      </div>
+      <div>
+        <h1 class="page-title text-center">{{ month|date:'F Y' }}</h1>
+      </div>
+      <div class="pl-5">
+        <a class="btn btn-link" href="?month={{next_month|date:'m'}}&year={{next_month|date:'Y'}}">
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col">
-      <h1>Calendar</h1>
-      <p class="lead">Not yet implemented</p>
+      <!-- Calendar -->
+      <section id="calendar" class="collectonme">
+        <div id="day-labels">
+          <div class="label">Sun</div>
+          <div class="label">Mon</div>
+          <div class="label">Tue</div>
+          <div class="label">Wed</div>
+          <div class="label">Thu</div>
+          <div class="label">Fri</div>
+          <div class="label">Sat</div>
+        </div>
+        {% for week in weeks %}
+        <div id="week{{ forloop.counter }}" class="week">
+          {% for day, href in week %}
+          {% if day is None %}
+          <a class="day noDate"></a>
+          {% else %}
+          {% if href %}
+          <a class="day" href="{{ href }}">
+            <span class="date{% if day == today %} today{% endif %}">{{ day|date:'j' }}</span>
+            <div class="day-content">
+              {% if href %}
+              <i class="fa fa-calendar"></i>
+              {% endif %}
+            </div>
+          </a>
+          {% else %}
+          <a class="day">
+            <span class="date{% if day == today %} today{% endif %}">{{ day|date:'j' }}</span>
+          </a>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </section>
+
     </div>
   </div>
 {% endblock %}

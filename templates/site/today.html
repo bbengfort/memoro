@@ -25,9 +25,18 @@
     </div>
   </div>
 
-  <div class="row mb-6">
+  <div class="row">
     <div class="col">
-      <h1 class="page-title">{{ object }}</h1>
+      <div class="page-header">
+        <div class="controls float-right">
+          <a class="btn btn-sm btn-link" href="{{ object.get_absolute_url }}">
+            View
+          </a>
+        </div>
+        <h1 class="page-title">{{ object }}</h1>
+      </div>
+
+
       <form class="today-form mt-4" role="form" method="post" action="{% url 'today' %}">
         <div class="form-group">
           <input type="text" class="form-control{% if form.errors.memo %} is-invalid{% endif %}"

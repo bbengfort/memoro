@@ -1,0 +1,90 @@
+.page-title {
+    min-width: 300px;
+}
+
+#calendar {
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+  border-top: 1px solid #c6c6c6;
+  border-left: 1px solid #c6c6c6;
+  position: relative;
+  z-index: 0;
+}
+#calendar #day-labels {
+  width: 100%;
+  border-bottom: 1px solid #c6c6c6;
+  border-right: 1px solid #c6c6c6;
+  overflow: auto;
+}
+#calendar #day-labels .label {
+  width: 14.285714286%;
+  float: left;
+  text-align: right;
+  padding: 10px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #7a7a7a;
+  background: rgba(255, 255, 255, 0.95);
+}
+#calendar .week {
+  width: 100%;
+  overflow: hidden;
+}
+#calendar .week .day {
+  width: 14.285714286%;
+  padding-bottom: 14.285714286%;
+  border-right: 1px solid #c6c6c6;
+  border-bottom: 1px solid #c6c6c6;
+  height: 0px;
+  float: left;
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+}
+#calendar .week .day .date {
+  display: block;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border-radius: 100%;
+  height: 25px;
+  width: 25px;
+  text-align: center;
+  line-height: 25px;
+  font-size: 14px;
+  color: #7a7a7a;
+}
+#calendar .week .day .date.today {
+  color: white;
+  background: #cd1b1b;
+}
+
+#calendar .day-content {
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    padding-top: 35px;
+}
+
+#calendar .week .day:first-of-type, #calendar .week .day:last-of-type {
+  background-color: rgba(235, 235, 235, 0.95);
+}
+#calendar .week .day:first-of-type.noDate:hover, #calendar .week .day:last-of-type.noDate:hover {
+  background-color: rgba(235, 235, 235, 0.95);
+  cursor: default;
+}
+#calendar .week .day:hover {
+  background-color: #305dd4;
+  cursor: pointer;
+}
+#calendar .week .day:hover.noDate {
+  background: rgba(255, 255, 255, 0.95);
+  cursor: default;
+}
+#calendar .week .day:hover .date {
+  color: #cfdef4;
+}
+#calendar .week .day:hover .date.today {
+  background: #cfdef4;
+  color: #305dd4;
+}

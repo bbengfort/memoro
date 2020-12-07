@@ -21,6 +21,7 @@ import re
 
 from django.db import models
 from django.conf import settings
+from django.urls import reverse_lazy as reverse
 from django.utils.translation import gettext as _
 
 from datetime import date
@@ -107,6 +108,17 @@ class Memo(TimeStampedModel):
             1: "🙂",
             2: "😀"
         }[self.feeling]
+
+    def get_absolute_url(self):
+        date = self.date.strftime("%Y %m %d").split()
+        kwargs = dict(zip(('year', 'month', 'day'), date))
+        return reverse('entry', kwargs=kwargs)
+
+    def get_admin_url(self):
+        return reverse(
+            'admin:{0}_{1}_change'.format(self._meta.app_label, self._meta.model_name),
+            args=(self.pk,)
+        )
 
     def __str__(self):
         return self.date.strftime("%A %B %d, %Y")
@@ -277,3 +289,16 @@ class Tabs(TimeStampedModel):
         verbose_name_plural = "Browser Tab Counts"
         ordering = ("-memo__date",)
         get_latest_by = "memo__date"
+
+    def total(self):
+        ntabs = 0
+        for tabc in (self.desktop_tabs, self.mobile_tabs, self.tablet_tabs):
+            if tabc:
+                ntabs += tabc
+        return ntabs
+
+    def __str__(self):
+        total = self.total()
+        if total > 0:
+            return f"{total} tabs open on {self.memo.date}"
+        return f"no tabs on {self.memo.date}"

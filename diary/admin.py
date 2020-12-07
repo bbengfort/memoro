@@ -20,11 +20,27 @@ Register models for admin management.
 from django.contrib import admin
 from .models import Memo, Location, GeoEntity, Tabs
 
+
+##########################################################################
+## Admin Forms
+##########################################################################
+
+class TabsInline(admin.StackedInline):
+
+    model = Tabs
+
+
+class MemoAdmin(admin.ModelAdmin):
+
+    inlines = [
+        TabsInline
+    ]
+
+
 ##########################################################################
 ## Register Admin Models
 ##########################################################################
 
-admin.site.register(Memo)
+admin.site.register(Memo, MemoAdmin)
 admin.site.register(Location)
 admin.site.register(GeoEntity)
-admin.site.register(Tabs)

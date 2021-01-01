@@ -97,6 +97,10 @@ SECRET_KEY = environ_setting("SECRET_KEY")
 # Used to load Google JS APIs
 GOOGLE_JS_API_KEY = environ_setting("GOOGLE_JS_API_KEY")
 
+# Instapaper API Credentials
+INSTAPAPER_CONSUMER_ID=environ_setting("INSTAPAPER_CONSUMER_ID")
+INSTAPAPER_CONSUMER_SECRET=environ_setting("INSTAPAPER_CONSUMER_SECRET")
+
 
 ##########################################################################
 ## Runtime

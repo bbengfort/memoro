@@ -6,6 +6,7 @@ django-model-utils==4.1.1
 django-rest-framework==0.1.0
 djangorestframework==3.12.2
 gunicorn==20.0.4
+oauth2==1.9.0.post1
 psycopg2==2.8.6
 python-dotenv==0.15.0
 whitenoise==5.2.0
@@ -13,6 +14,7 @@ whitenoise==5.2.0
 ## Subdependencies
 # asgiref==3.3.1
 # bleach==3.2.1
+# httplib2==0.18.1
 # importlib-metadata==3.1.1
 # Markdown==3.3.3
 # packaging==20.7
@@ -24,6 +26,6 @@ whitenoise==5.2.0
 # zipp==3.4.0
 
 ## Python Dependencies
-# pip==20.2.4
+# pip==20.3.3
 # setuptools==47.1.1
 # wheel==0.34.2

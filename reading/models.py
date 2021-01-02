@@ -139,6 +139,52 @@ class Article(TimeStampedModel):
 
 
 ##########################################################################
+## Article Counts
+##########################################################################
+
+class ArticleCounts(TimeStampedModel):
+    """
+    Records reading progress for a specific day.
+    """
+
+    memo = models.OneToOneField(
+        "diary.Memo", models.CASCADE,
+        null=False, blank=False, related_name="article_counts",
+        help_text="The reading list counts for the specified day",
+    )
+
+    read = models.PositiveSmallIntegerField(
+        default=None, null=True, blank=True,
+        help_text="The number of articles read today"
+    )
+
+    unread = models.PositiveSmallIntegerField(
+        default=None, null=True, blank=True,
+        help_text="The number of articles to read today"
+    )
+
+    archived = models.PositiveSmallIntegerField(
+        default=None, null=True, blank=True,
+        help_text="The number of articles archived, year to date"
+    )
+
+    starred = models.PositiveSmallIntegerField(
+        default=None, null=True, blank=True,
+        help_text="The number of articles starred, year to date"
+    )
+
+    class Meta:
+        db_table = "article_counts"
+        verbose_name = "Reading List Count"
+        verbose_name_plural = "Reading List Counts"
+        ordering = ("-memo__date",)
+        get_latest_by = "memo__date"
+
+    def __str__(self):
+        return f"{self.read} read today, {self.unread} still unread"
+
+
+##########################################################################
 ## Instapaper Access Token Cache
 ##########################################################################
 

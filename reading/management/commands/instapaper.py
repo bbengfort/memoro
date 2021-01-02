@@ -20,13 +20,14 @@ CLI interface to Instapaper API
 import os
 import getpass
 
+from datetime import date
 from diary.models import Memo
 from reading.instapaper import Instapaper
 from django.contrib.auth.models import User
-from reading.models import Article, InstapaperAccount
 from reading.utils import parse_bool, parse_timestamp
 from reading.instapaper import InstapaperException, HTTPException
 from django.core.management.base import BaseCommand, CommandError
+from reading.models import Article, ArticleCounts, InstapaperAccount
 
 
 ##########################################################################
@@ -60,6 +61,10 @@ class Command(BaseCommand):
             "-a", "--associate", action="store_true",
             help="associate local articles with memoro entries without api call"
         )
+        parser.add_argument(
+            "-c", "--article-count", action="store_true",
+            help="perform the article count for today's memoro"
+        )
 
     def handle(self, *args, **options):
         # Get the user associated with the account
@@ -67,6 +72,10 @@ class Command(BaseCommand):
 
         if options["associate"]:
             self.associate()
+            return
+
+        if options["article_count"]:
+            self.article_count()
             return
 
         with http_error(options["debug"]):
@@ -171,6 +180,10 @@ class Command(BaseCommand):
         record["progress_timestamp"] = parse_timestamp(record["progress_timestamp"])
         record["starred"] = parse_bool(record["starred"])
 
+        # If record has been moved it will be marked "deleted" from previous folder
+        # So we must ensure that it is not deleted when we move it to this folder
+        record["deleted"] = False
+
         article, was_created = Article.objects.update_or_create(
             bookmark_id=bookmark_id, defaults=record
         )
@@ -204,6 +217,30 @@ class Command(BaseCommand):
                 count += 1
 
         print(f"associated {count} articles")
+
+    def article_count(self):
+        memo = Memo.objects.filter(date=date.today()).first()
+        if not memo:
+            return
+
+        if not hasattr(memo, "article_counts"):
+            counts = ArticleCounts.objects.create(memo=memo)
+        else:
+            counts = memo.article_counts
+
+        counts.read = memo.articles.count()
+
+        qs = Article.objects.filter(account=self.user.instapaper_account, deleted=False)
+        counts.unread = qs.filter(folder="unread", memo__isnull=True).count()
+
+        year = memo.date.year
+        counts.archived = qs.filter(folder="archive", time__year=year).count()
+        counts.starred = qs.filter(folder="starred", time__year=year).count()
+        counts.save()
+
+        print(counts)
+        print(f"year to date: {counts.archived} archived, {counts.starred} starred")
+
 
 class http_error(object):
 

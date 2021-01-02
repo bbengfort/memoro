@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'markdownify',
     'diary',
+    'reading',
 ]
 
 # Request handling

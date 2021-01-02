@@ -46,6 +46,20 @@ class Instapaper(object):
     the keys, otherwise raises an improperly configured exception.
     """
 
+    @classmethod
+    def cached_access_token(
+        cls, oauth_token, oauth_token_secret, client_key=None, client_secret=None
+    ):
+        """
+        Initialize API client with cached access token to prevent reauthentication.
+        """
+        client = cls(client_key=client_key, client_secret=client_secret)
+        consumer = oauth.Consumer(client.client_key, client.client_secret)
+        access_token = oauth.Token(oauth_token, oauth_token_secret)
+        client.session = oauth.Client(consumer, access_token)
+        client.session.set_signature_method = oauth.SignatureMethod_HMAC_SHA1()
+        return client
+
     def __init__(self, client_key=None, client_secret=None):
         if client_key is None:
             if settings and settings.INSTAPAPER_CONSUMER_ID:
@@ -103,6 +117,7 @@ class Instapaper(object):
         access_token = oauth.Token(token["oauth_token"], token["oauth_token_secret"])
         self.session = oauth.Client(consumer, access_token)
         self.session.set_signature_method = oauth.SignatureMethod_HMAC_SHA1()
+        return token
 
     def verify_credentials(self):
         """
@@ -163,8 +178,8 @@ class Instapaper(object):
             The  value of the time that the progress was recorded.
         """
         if timestamp is None:
-            timestamp = datetime.utcnow()
-        timestamp = timestamp.replace(tzinfo=timezone.utc).timestamp()
+            timestamp = datetime.now(tz=timezone.utc)
+        timestamp = timestamp.timestamp()
 
         params = {
             "bookmark_id": bookmark_id,
@@ -231,7 +246,7 @@ class Instapaper(object):
             values passed to url will be ignored, and the content parameter is required.
         """
         params = {
-            "url":, url, "title": title, "description": description,
+            "url": url, "title": title, "description": description,
             "folder_id": folder_id, "resolve_final_url": resolve_final_url,
         }
 
@@ -461,7 +476,9 @@ class Instapaper(object):
             "User-Agent": "Memoro Instapaper API Client (Python)",
         }
 
-        body = json.dumps(data, ensure_ascii=False).encode('UTF-8') if data else b''
+        # body = json.dumps(data, ensure_ascii=False).encode('UTF-8') if data else b''
+        from urllib.parse import urlencode
+        body = urlencode({key: str(val) for key, val in data.items()}) if data else b''
         rep, content = self.session.request(
             self._endpoint(path), method="POST", body=body, headers=headers
         )
@@ -502,7 +519,7 @@ class InstapaperException(Exception):
 
     def __init__(self, code, message):
         self.code = code
-        self.messsage = message
+        self.message = message
 
     def __str__(self):
         return f"{self.code}: {self.message}"
@@ -516,23 +533,3 @@ class HTTPException(InstapaperException):
 
     def __str__(self):
         return f"{self.response.status} {self.response.reason}"
-
-
-if __name__ == "__main__":
-    from dotenv import find_dotenv, load_dotenv
-    load_dotenv(find_dotenv())
-
-    client = Instapaper()
-
-    try:
-        client.authenticate(
-            os.getenv("INSTAPAPER_USERNAME"), os.getenv("INSTAPAPER_PASSWORD")
-        )
-        print(client.verify_credentials())
-        print(client.bookmarks())
-    except HTTPException as e:
-        print(e)
-        print(e.response)
-        print(e.body)
-    except Exception as e:
-        print(e)

@@ -530,6 +530,4 @@ class HTTPException(InstapaperException):
     def __init__(self, response, body):
         self.response = response
         self.body = body
-
-    def __str__(self):
-        return f"{self.response.status} {self.response.reason}"
+        super(HTTPException, self).__init__(response.status, response.reason)

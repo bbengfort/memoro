@@ -34,6 +34,13 @@
               {% endif %}
             </a>
           </li>
+          <li class="nav-item{% if page == 'instapaper' %} active{% endif %}">
+            <a class="nav-link" href="{% url 'instapaper' %}">Instapaper
+              {% if page == 'instapaper' %}
+              <span class="sr-only">(current)</span>
+              {% endif %}
+            </a>
+          </li>
 
           <!-- Nav Item - User Information -->
           {% if user.is_authenticated %}

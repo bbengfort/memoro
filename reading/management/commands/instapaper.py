@@ -82,8 +82,10 @@ class Command(BaseCommand):
             # Create the Instapaper API client, using cached access tokens if available.
             self.make_instapaper_client(**options)
 
-            # Get the have query to reduce the result set returned
-            for folder in ("unread", "archive", "starred"):
+            # Note: ignoring the "starred" folder since this duplicates other folders
+            # TODO: handle other folders
+            for folder in ("unread", "archive"):
+                # Get the have query to reduce the result set returned
                 have = Article.instapaper.have(self.user, folder)
                 bookmarks = self.client.bookmarks(
                     limit=500, folder_id=folder, have=have
@@ -141,73 +143,41 @@ class Command(BaseCommand):
         """
         Updates the database with the fetched bookmarks
         """
+        account = self.user.instapaper_account
         created, updated, deleted = 0, 0, 0
+
         for record in bookmarks:
             rtype = record.pop("type").lower().strip()
             if rtype == "bookmark":
-                was_created = self._handle_bookmark(record, folder)
-                if was_created:
+                if Article.instapaper.from_bookmark(account, record, folder):
                     created += 1
                 else:
                     updated += 1
 
             elif rtype == "user":
-                self.user.instapaper_account.refresh_from_api(record)
-                self.user.instapaper_account.save()
+                account.refresh_from_api(record)
+                account.save()
 
             elif rtype == "meta":
                 deleted_ids = record.get("delete_ids", None)
                 if deleted_ids:
-                    for bookmark_id in deleted_ids.split(","):
-                        bookmark_id = int(bookmark_id.strip())
-                        article = Article.objects.filter(bookmark_id=bookmark_id).first()
-                        if article:
-                            article.deleted = True
-                            article.save()
-                            deleted += 1
+                    deleted += Article.instapaper.delete_bookmarks(deleted_ids)
 
             else:
                 raise ValueError(f"unhandled record type '{rtype}'")
 
         return created, updated, deleted
 
-    def _handle_bookmark(self, record, folder):
-        # TODO: handle folder changes e.g. unread --> something else.
-        bookmark_id = record.pop("bookmark_id")
-        record["account"] = self.user.instapaper_account
-        record["folder"] = folder
-        record["time"] = parse_timestamp(record["time"])
-        record["progress_timestamp"] = parse_timestamp(record["progress_timestamp"])
-        record["starred"] = parse_bool(record["starred"])
-
-        # If record has been moved it will be marked "deleted" from previous folder
-        # So we must ensure that it is not deleted when we move it to this folder
-        record["deleted"] = False
-
-        article, was_created = Article.objects.update_or_create(
-            bookmark_id=bookmark_id, defaults=record
-        )
-
-        # Associate the post with memoro if the reading progress is greater than 0
-        # based on the day of the progress timestamp. If progress increases on
-        # multiple days, this will cause the last day to be the memoro record.
-        if article.read():
-            memo = Memo.objects.filter(date=article.progress_timestamp.date()).first()
-            if memo:
-                article.memo = memo
-                article.save()
-
-        return was_created
-
     def associate(self):
         # Go through all articles in any folder that don't have a memo to associate.
-        query = Article.objects.filter(
-            account=self.user.instapaper_account, memo__isnull=True
-        ).order_by('-progress_timestamp')
+        query = Article.objects.filter(account=self.user.instapaper_account)
+        query = query.order_by('-progress_timestamp')
 
         count = 0
         for article in query:
             if not article.read():
+                article.memo = None
+                article.save()
                 continue
 
             memo = Memo.objects.filter(date=article.progress_timestamp.date()).first()
@@ -219,24 +189,7 @@ class Command(BaseCommand):
         print(f"associated {count} articles")
 
     def article_count(self):
-        memo = Memo.objects.filter(date=date.today()).first()
-        if not memo:
-            return
-
-        if not hasattr(memo, "article_counts"):
-            counts = ArticleCounts.objects.create(memo=memo)
-        else:
-            counts = memo.article_counts
-
-        counts.read = memo.articles.count()
-
-        qs = Article.objects.filter(account=self.user.instapaper_account, deleted=False)
-        counts.unread = qs.filter(folder="unread", memo__isnull=True).count()
-
-        year = memo.date.year
-        counts.archived = qs.filter(folder="archive", time__year=year).count()
-        counts.starred = qs.filter(folder="starred", time__year=year).count()
-        counts.save()
+        counts = ArticleCounts.objects.daily_counts(self.user.instapaper_account)
 
         print(counts)
         print(f"year to date: {counts.archived} archived, {counts.starred} starred")

@@ -5,6 +5,7 @@ django-markdownify==0.8.1
 django-model-utils==4.1.1
 django-rest-framework==0.1.0
 djangorestframework==3.12.2
+django-widget-tweaks==1.4.8
 gunicorn==20.0.4
 oauth2==1.9.0.post1
 psycopg2==2.8.6

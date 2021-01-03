@@ -22,8 +22,8 @@ import warnings
 from django.db import models
 from django.conf import settings
 from reading.utils import parse_bool
-from reading.managers import InstapaperManager
 from model_utils.models import TimeStampedModel
+from reading.managers import InstapaperManager, ArticleCountsManager
 
 
 ##########################################################################
@@ -41,7 +41,7 @@ class Article(TimeStampedModel):
     """
 
     url = models.URLField(
-        null=True, blank=True, default=None,
+        null=True, blank=True, default=None, max_length=500,
         help_text="The source of the article (will be empty if private source isn't)",
     )
 
@@ -133,9 +133,12 @@ class Article(TimeStampedModel):
         Detects if the article has been read based on the progress fields.
         """
         # NOTE: apparently the progress goes back to 0.0 when the article has been
-        # read 100% in some cases; so I've also added a check if progress is later
-        # than time, meaning that some progress has been made.
-        return self.progress > 0.0 or self.progress_timestamp > self.time
+        # read 100% in some cases; so if the article is not in the unread folder,
+        # I've also added a check if progress is later than time, meaning that some
+        # progress has been made.
+        if self.progress > 0.0:
+            return True
+        return (self.folder != "unread" and self.progress_timestamp > self.time)
 
 
 ##########################################################################
@@ -179,6 +182,8 @@ class ArticleCounts(TimeStampedModel):
         verbose_name_plural = "Reading List Counts"
         ordering = ("-memo__date",)
         get_latest_by = "memo__date"
+
+    objects = ArticleCountsManager()
 
     def __str__(self):
         return f"{self.read} read today, {self.unread} still unread"
@@ -235,6 +240,9 @@ class InstapaperAccount(TimeStampedModel):
         if self.username:
             return self.username
         return str(self.user)
+
+    def has_cached_oauth(self):
+        return bool(self.oauth_token and self.oauth_token_secret)
 
     def refresh_from_api(self, data, check_unhandled=True):
         """

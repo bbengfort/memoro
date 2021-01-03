@@ -35,6 +35,7 @@ from django.contrib import admin
 from rest_framework import routers
 from django.urls import path, include
 
+from reading.views import InstapaperManager
 from memoro.views import HeartbeatViewSet, Overview
 from diary.views import TodayView, CalendarView, EntryView
 
@@ -59,6 +60,7 @@ urlpatterns = [
     path("<int:year>-<int:month>-<int:day>/", EntryView.as_view(), name="entry"),
     path("calendar/", CalendarView.as_view(), name="calendar"),
     path("overview/", Overview.as_view(), name="overview"),
+    path("instapaper/", InstapaperManager.as_view(), name="instapaper"),
     path('api/', include((router.urls, 'rest_framework'), namespace="api")),
 ]
 

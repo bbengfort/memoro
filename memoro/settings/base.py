@@ -32,6 +32,8 @@ import os
 import dj_database_url
 
 from pathlib import Path
+from django.contrib.messages import constants as message_constants
+
 
 ##########################################################################
 ## Paths and Helpers
@@ -97,6 +99,10 @@ SECRET_KEY = environ_setting("SECRET_KEY")
 # Used to load Google JS APIs
 GOOGLE_JS_API_KEY = environ_setting("GOOGLE_JS_API_KEY")
 
+# Instapaper API Credentials
+INSTAPAPER_CONSUMER_ID=environ_setting("INSTAPAPER_CONSUMER_ID")
+INSTAPAPER_CONSUMER_SECRET=environ_setting("INSTAPAPER_CONSUMER_SECRET")
+
 
 ##########################################################################
 ## Runtime
@@ -121,9 +127,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'rest_framework',
     'markdownify',
+    'widget_tweaks',
     'diary',
+    'reading',
 ]
 
 # Request handling
@@ -145,6 +154,18 @@ TIME_ZONE = 'America/New_York'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# Map message levels to bootstrap classes
+MESSAGE_TAGS = {
+    message_constants.DEBUG: "secondary",
+    message_constants.INFO: "info",
+    21: "primary",
+    22: "light",
+    23: "dark",
+    message_constants.SUCCESS: "success",
+    message_constants.WARNING: "warning",
+    message_constants.ERROR: "danger",
+}
 
 
 ##########################################################################

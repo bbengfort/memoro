@@ -18,12 +18,17 @@ Register models for admin management.
 ##########################################################################
 
 from django.contrib import admin
-from .models import Memo, Location, GeoEntity, Tabs
+from reading.models import ArticleCounts
+from diary.models import Memo, Location, GeoEntity, Tabs
 
 
 ##########################################################################
 ## Admin Forms
 ##########################################################################
+
+class ArticleCountsInline(admin.StackedInline):
+
+    model = ArticleCounts
 
 class TabsInline(admin.StackedInline):
 
@@ -33,7 +38,7 @@ class TabsInline(admin.StackedInline):
 class MemoAdmin(admin.ModelAdmin):
 
     inlines = [
-        TabsInline
+        TabsInline, ArticleCountsInline
     ]
 
 

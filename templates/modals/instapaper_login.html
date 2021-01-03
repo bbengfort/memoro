@@ -1,0 +1,59 @@
+{% extends "modals/base.html" %}
+
+{% block modal_body %}
+  {# The modal does not expect to have an associated form, which is why this form is manually defined #}
+  <form role="form" id="instapaperLoginForm" method="post" action="{% url 'instapaper' %}" autocomplete="off">
+    {% with cached=request.user.instapaper_account.has_cached_oauth %}
+    <div class="form-group">
+      <label for="id_username">Username</label>
+      <input type="text" class="form-control" aria-describedby="usernameHelp"
+        id="id_username" name="username" autocomplete="off"
+        {% if cached %}disabled{% endif %}
+        />
+      <small id="usernameHelp" class="form-text text-muted">
+        Instapaper account username or email address
+      </small>
+      <div class="invalid-feedback">{% for err in form.errors.username %}{{ err }}{% endfor %}</div>
+    </div>
+    <div class="form-group">
+      <label for="id_password">Password</label>
+      <input type="password" class="form-control{% if form.errors.password %} is-invalid{% endif %}"
+        id="id_password" name="password"
+        aria-describedby="passwordHelp"
+        autocomplete="off"
+        {% if cached %}disabled{% endif %}
+        />
+      <small id="passwordHelp" class="form-text text-muted">Password is not stored, it is used to fetch an access token</small>
+      <div class="invalid-feedback">{% for err in form.errors.password %}{{ err }}{% endfor %}</div>
+    </div>
+    <div class="form-group">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input{% if form.errors.oauth_cached %} is-invalid{% endif %}"
+          id="id_oauth_cached" name="oauth_cached"
+          {% if cached %}checked{% else %}disabled{% endif %}
+          aria-describedby="oauthCachedHelp"
+          autocomplete="off"
+          />
+        <label for="id_oauth_cached" class="form-check-label">Use cached access-token</label>
+        <small id="passwordHelp" class="form-text text-muted">
+          {% if cached %}
+          Uncheck to force reauthentication with the Instapaper API
+          {% else %}
+          No cached access token available, must reauthenticate with Instapaper.
+          {% endif %}
+        </small>
+        <div class="invalid-feedback">{% for err in form.errors.oauth_cached %}{{ err }}{% endfor %}</div>
+      </div>
+    </div>
+    {% endwith %}
+
+    <!-- hidden fields -->
+    <input type="hidden" value="{{ request.path }}" id="id_redirect_to" name="redirect_to" />
+    {% csrf_token %}
+  </form>
+{% endblock %}
+
+{% block modal_footer %}
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <button type="submit" class="btn btn-primary" form="instapaperLoginForm">Login</button>
+{% endblock %}

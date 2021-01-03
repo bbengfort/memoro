@@ -1,0 +1,128 @@
+{% extends 'page.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block page %}
+  <!-- alerts and messages -->
+  <div id="alerts" class="row mb-2">
+    <div class="col">
+      {% if form.errors %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        {{ error }}
+        {% endfor %}
+        {% else %}
+        Could not synchronize with Instapaper
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% include "layouts/messages.html" %}
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <h1 class="page-title">Instapaper Manager</h1>
+    </div>
+  </div>
+
+  <!-- 2 column layout for most uses -->
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card bg-light mb-3">
+        <div class="card-body">
+          <h5>Synchronization API</h5>
+          <form role="form" id="instapaperLoginForm" method="post" action="{% url 'instapaper' %}" autocomplete="off">
+            <!-- hidden fields -->
+            <input type="hidden" value="{{ request.path }}" id="id_redirect_to" name="redirect_to" />
+            {% csrf_token %}
+            {% with cached=form.account.has_cached_oauth %}
+            <div class="form-group">
+              <label for="id_username">Username</label>
+              <input type="text" class="form-control{% if form.errors.username %} is-invalid{% endif %}"
+                aria-describedby="usernameHelp"
+                id="id_username" name="username"
+                autocomplete="off"
+                {% if cached %}disabled{% endif %}
+                />
+              <small id="usernameHelp" class="form-text text-muted">Instapaper account username or email address</small>
+              <div class="invalid-feedback">{% for err in form.errors.username %}{{ err }}{% endfor %}</div>
+            </div>
+            <div class="form-group">
+              <label for="id_password">Password</label>
+              <input type="password" class="form-control{% if form.errors.password %} is-invalid{% endif %}"
+                id="id_password" name="password"
+                aria-describedby="passwordHelp"
+                autocomplete="off"
+                {% if cached %}disabled{% endif %}
+                />
+              <small id="passwordHelp" class="form-text text-muted">Password is not stored, it is used to fetch an access token</small>
+              <div class="invalid-feedback">{% for err in form.errors.password %}{{ err }}{% endfor %}</div>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input{% if form.errors.oauth_cached %} is-invalid{% endif %}"
+                  id="id_oauth_cached" name="oauth_cached"
+                  {% if cached %}checked{% else %}disabled{% endif %}
+                  aria-describedby="oauthCachedHelp"
+                  autocomplete="off"
+                  />
+                <label for="id_oauth_cached" class="form-check-label">Use cached access-token</label>
+                <small id="passwordHelp" class="form-text text-muted">
+                  {% if cached %}
+                  Uncheck to force reauthentication with the Instapaper API
+                  {% else %}
+                  No cached access token available, must reauthenticate with Instapaper.
+                  {% endif %}
+                </small>
+                <div class="invalid-feedback">{% for err in form.errors.oauth_cached %}{{ err }}{% endfor %}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary" form="instapaperLoginForm">
+                <i class="fa fa-refresh"></i> Sync
+              </button>
+              <button type="clear" class="btn btn-secondary" id="clearInstapaperLoginForm">
+                <i class="fa fa-minus-circle"></i> Clear
+              </button>
+            </div>
+            {% endwith %}
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <h5>Synchronization Status</h5>
+      {% with account=request.user.instapaper_account %}
+      {% if account.last_synchronized %}
+      <p>Last synchronization {{ account.last_synchronized|naturaltime }}</p>
+
+      {% if not account.has_cached_oauth %}
+      <p class="text-primary">Login to the Intapaper API to synchronize your articles</p>
+      {% endif %}
+
+      <dl class="row">
+        {% for key, val in article_counts.items %}
+        <dd class="col-1"><span class="badge badge-pill badge-info">{{ val }}</span></dd>
+        <dt class="col-11">{{ key }}</dt>
+        {% endfor %}
+      </dl>
+      {% else %}
+      <p class="text-primary">Login to the Intapaper API to synchronize your articles</p>
+      {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script src="{%static 'js/instapaper.js' %}" type="text/javascript"></script>
+{% endblock %}

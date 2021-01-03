@@ -48,3 +48,7 @@ blockquote {
 blockquote p {
   display: inline;
 }
+
+.article-counts {
+  font-size: 0.95em;
+}

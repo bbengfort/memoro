@@ -18,8 +18,10 @@ Views and request handlers for the reading app
 ##########################################################################
 
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from reading.forms import InstapaperLoginForm
 from django.views.generic.edit import FormView
+from django.urls import reverse_lazy as reverse
 from reading.instapaper import InstapaperException
 from reading.models import InstapaperAccount, Article
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -32,7 +34,6 @@ class InstapaperManager(LoginRequiredMixin, FormView):
 
     form_class = InstapaperLoginForm
     template_name = "site/instapaper.html"
-    success_url = "/instapaper/"
 
     def form_valid(self, form):
         try:
@@ -42,13 +43,20 @@ class InstapaperManager(LoginRequiredMixin, FormView):
             return self.form_invalid(form)
 
         try:
-            msg = "{0} created, {1} updated, {2} deleted".format(*form.synchronize())
+            msg = "Instapaper sychronized: {} articles created, {} updated, {} deleted"
+            msg = msg.format(*form.synchronize())
             messages.success(self.request, msg)
         except InstapaperException as e:
             form.add_error(None, f"synchronization failed ({e})")
             return self.form_invalid(form)
 
-        return super().form_valid(form)
+        redirect_to = form.cleaned_data["redirect_to"]
+        return HttpResponseRedirect(self.get_success_url(redirect_to))
+
+    def get_success_url(self, redirect_to=None):
+        if redirect_to:
+            return redirect_to
+        return reverse("instapaper")
 
     def get_form_kwargs(self):
         """

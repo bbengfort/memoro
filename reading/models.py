@@ -229,6 +229,11 @@ class InstapaperAccount(TimeStampedModel):
         help_text="Cached xAuth secret from authentication"
     )
 
+    last_synchronized = models.DateTimeField(
+        null=True, blank=True, default=None, editable=False,
+        help_text="The last time the account was synchronized",
+    )
+
     class Meta:
         db_table = "instapaper_accounts"
         ordering = ("-modified",)

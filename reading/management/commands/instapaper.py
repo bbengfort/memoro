@@ -22,6 +22,7 @@ import getpass
 
 from datetime import date
 from diary.models import Memo
+from django.utils import timezone
 from reading.instapaper import Instapaper
 from django.contrib.auth.models import User
 from reading.utils import parse_bool, parse_timestamp
@@ -94,6 +95,9 @@ class Command(BaseCommand):
                 # Handle bookmarks and report the results
                 crt, upd, dlt = self.handle_bookmarks(bookmarks, folder)
                 print(f"{crt} created, {upd} updated, {dlt} deleted in {folder}")
+
+            self.user.instapaper_account.last_synchronized = timezone.now()
+            self.user.instapaper_account.save()
 
     def get_user(self, username):
         try:

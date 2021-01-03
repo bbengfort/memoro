@@ -18,6 +18,7 @@ Web forms for simple HTTP interactions
 ##########################################################################
 
 from django import forms
+from django.utils import timezone
 from reading.instapaper import Instapaper
 from reading.models import Article, ArticleCounts
 from django.core.exceptions import ValidationError
@@ -32,6 +33,7 @@ class InstapaperLoginForm(forms.Form):
     username = forms.CharField(required=False)
     password = forms.CharField(required=False, widget=forms.PasswordInput())
     oauth_cached = forms.BooleanField(required=False)
+    redirect_to = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, account, **kwargs):
         # Create the initial data from the account
@@ -138,6 +140,10 @@ class InstapaperLoginForm(forms.Form):
 
                 else:
                     raise ValueError(f"unhandled record type '{rtype}'")
+
+        # Update the account synchronization status
+        self.account.last_synchronized = timezone.now()
+        self.account.save()
 
         # Create daily counts for Memoro
         ArticleCounts.objects.daily_counts(self.account)
